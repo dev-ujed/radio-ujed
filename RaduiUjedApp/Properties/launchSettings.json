@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RaduiUjedApp": {
+      "commandName": "Project",
+      "sqlDebugging": false
+    }
+  }
+}

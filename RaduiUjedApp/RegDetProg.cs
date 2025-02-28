@@ -1,0 +1,801 @@
+﻿using Newtonsoft.Json;
+using RaduiUjedApp.helpers;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics.Eventing.Reader;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+
+namespace RaduiUjedApp
+{
+    public partial class RegDetProg : Form
+    {
+        private int idRegistro;
+        private TimeSpan hora; // Se usa TimeSpan para manejar hora
+        private readonly string apiUrl = "http://192.168.10.176/categorias";
+        private List<detalles> programaciones; // Lista de programaciones
+        private TimeSpan ultimaHora;
+        private int ultimaDuracion = 0;
+
+        private detalles detalleSeleccionado; // detalle seleccionado
+
+
+        private string nuevafecha;
+        public RegDetProg(int id, string horaRecibida)
+        {
+            InitializeComponent();
+            idRegistro = id;
+            nuevafecha = horaRecibida;
+
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(horaRecibida)) // Verificar si la cadena no está vacía
+                {
+                    // Mostrar en un MessageBox la cadena que estamos recibiendo
+                    //MessageBox.Show("Fecha recibida: " + horaRecibida, "Debug");
+
+                    // Extraer la parte de la hora (por ejemplo, "07:00:00 PM" o "23:00:00")
+                    string horaString = ExtractHora(horaRecibida);
+
+                    // Intentar convertir la hora a TimeSpan
+                    if (TimeSpan.TryParse(horaString, out TimeSpan horaExtraida))
+                    {
+                        this.hora = horaExtraida; // Guardar la hora como TimeSpan
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al convertir la hora: Formato incorrecto.\nHora extraída: " + horaString);
+                        this.hora = TimeSpan.Zero; // Valor por defecto si no se pudo convertir
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error: La fecha/hora está vacía.");
+                    this.hora = TimeSpan.Zero;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error al procesar la hora: " + ex.Message);
+                this.hora = TimeSpan.Zero;
+            }
+
+            // Mostrar los datos en los controles
+            //lblID.Text = "ID: " + idRegistro.ToString();
+            lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
+            // Cargar datos de las categorias
+            CargarCategorias();
+        }
+        private static RegDetProg instance;
+
+        public static RegDetProg GetInstance(Form contenedorPadre, int id, string fechaHoraString)
+        {
+            if (instance == null || instance.IsDisposed)
+            {
+                instance = new RegDetProg(id, fechaHoraString);
+                instance.MdiParent = contenedorPadre;
+                instance.FormBorderStyle = FormBorderStyle.None;
+                instance.Dock = DockStyle.Fill;
+            }
+            else
+            {
+                // Si la ventana ya existe, actualizar los datos
+                instance.idRegistro = id;
+                instance.nuevafecha = fechaHoraString;
+                instance.lblHora.Text = "Hora: " + fechaHoraString;
+
+                if (instance.WindowState == FormWindowState.Minimized)
+                    instance.WindowState = FormWindowState.Normal;
+                instance.BringToFront();
+            }
+
+            return instance;
+        }
+
+        // Método para extraer la hora de la cadena recibida
+        private string ExtractHora(string fechaHoraString)
+        {
+            try
+            {
+                // Si la fecha y hora está en formato "dd/MM/yyyy hh:mm:ss tt", extraemos solo la hora
+                var fechaHora = DateTime.Parse(fechaHoraString);
+                return fechaHora.ToString("HH:mm:ss"); // Solo devuelve la parte de la hora (formato 24h)
+            }
+            catch (FormatException)
+            {
+                // Si el formato no es correcto, manejar el error
+                MessageBox.Show("Formato de fecha no válido: " + fechaHoraString);
+                return string.Empty;
+            }
+        }
+
+
+        private async Task CargarCategorias()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+                        List<Categoria> categorias = JsonConvert.DeserializeObject<List<Categoria>>(jsonResponse);
+
+                        // Llenar el ComboBox con las categorías
+                        txtCategoria.DataSource = categorias;
+                        txtCategoria.DisplayMember = "descripcion";
+                        txtCategoria.ValueMember = "id";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al obtener las categorías: " + response.ReasonPhrase);
+                    }
+                }
+
+                if(this.ultimaHora != TimeSpan.Zero)
+                {
+                    lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
+                }
+                else
+                {
+                    lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+        private async void RegDetProg_Load(object sender, EventArgs e)
+        {
+            // URL de la API
+            string apiUrl = $"http://192.168.10.176/detalleprog/{idRegistro}";
+
+            // Obtener los datos de la API
+            List<detalles> progra = await ObtenerDetProgramacionDesdeAPI(apiUrl);
+
+            // Mostrar los datos en el DataGridView
+            dataGridViewDet.DataSource = progra;
+
+            // Configurar el DataGridView
+            ConfigurarDataGridView();
+
+        }
+
+        private void ConfigurarDataGridView()
+        {
+            // 🔹 Si no hay columnas, agregarlas manualmente para evitar errores
+            if (dataGridViewDet.Columns.Count == 0)
+            {
+                dataGridViewDet.Columns.Add("hora", "Hora");
+                dataGridViewDet.Columns.Add("u_DET_DES", "Descripción de programación");
+                dataGridViewDet.Columns.Add("tiempo", "Tiempo");
+            }
+
+            // Configurar propiedades generales del DataGridView
+            dataGridViewDet.ReadOnly = true;
+            dataGridViewDet.AllowUserToAddRows = false;
+            dataGridViewDet.AllowUserToDeleteRows = false;
+            dataGridViewDet.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+            // 🔹 Agregar columna de botón si no existe
+            if (!dataGridViewDet.Columns.Contains("btnUbicacion"))
+            {
+                DataGridViewButtonColumn btnCol = new DataGridViewButtonColumn
+                {
+                    HeaderText = "Acciones",
+                    Text = "Abrir ubicación",
+                    UseColumnTextForButtonValue = true,
+                    Name = "btnUbicacion"
+                };
+
+                dataGridViewDet.Columns.Add(btnCol);
+            }
+
+            // 🔹 Verificar que las columnas existen antes de configurarlas
+            if (dataGridViewDet.Columns.Contains("hora"))
+            {
+                dataGridViewDet.Columns["hora"].HeaderText = "Hora de inicio";
+                dataGridViewDet.Columns["hora"].DefaultCellStyle.Format = "HH:mm:ss";
+            }
+
+            if (dataGridViewDet.Columns.Contains("u_DET_DES"))
+            {
+                dataGridViewDet.Columns["u_DET_DES"].HeaderText = "Descripción de programación";
+                dataGridViewDet.Columns["u_DET_DES"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            }
+
+            if (dataGridViewDet.Columns.Contains("tiempo"))
+            {
+                dataGridViewDet.Columns["tiempo"].HeaderText = "Tiempo ' ";
+            }
+
+            // 🔹 Ocultar columnas innecesarias si existen
+            string[] columnasOcultar = { "deT_ID", "reG_ID", "tipO_ID", "categoriaRuta" };
+            foreach (string columna in columnasOcultar)
+            {
+                if (dataGridViewDet.Columns.Contains(columna))
+                {
+                    dataGridViewDet.Columns[columna].Visible = false;
+                }
+            }
+
+            // 🔹 Ajustar tamaño de las filas automáticamente
+            dataGridViewDet.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+            // 🔹 Habilitar edición en la columna de botones
+            foreach (DataGridViewColumn col in dataGridViewDet.Columns)
+            {
+                if (col is DataGridViewButtonColumn)
+                {
+                    col.ReadOnly = false;
+                }
+            }
+
+            // 🔹 Mover la columna "Acciones" al final
+            if (dataGridViewDet.Columns.Contains("btnUbicacion"))
+            {
+                dataGridViewDet.Columns["btnUbicacion"].DisplayIndex = dataGridViewDet.Columns.Count - 1;
+            }
+        }
+
+        private async Task<List<detalles>> ObtenerDetProgramacionDesdeAPI(string apiUrl)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                // Hacer la solicitud GET a la API
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Leer la respuesta como una cadena JSON
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    // Deserializar el JSON en una lista de objetos Usuario
+                    programaciones = JsonConvert.DeserializeObject<List<detalles>>(json);
+                    var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+
+                    if (ultimoPrograma != null)
+                    {
+                        this.ultimaDuracion = ultimoPrograma.tiempo;
+                        TimeSpan horaUltimoPrograma = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimaDuracion));
+                        this.ultimaHora = horaUltimoPrograma;
+                        lblHora.Text = "Hora: " + horaUltimoPrograma.ToString(@"hh\:mm\:ss");
+                    }
+
+                    return programaciones;
+                }
+                else
+                {
+                    //MessageBox.Show("Error al cargar los datos de la API.");
+                    return new List<detalles>();
+                }
+            }
+        }
+
+        private async Task RefrescarDesdeAPI(string apiUrl)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    programaciones = JsonConvert.DeserializeObject<List<detalles>>(json) ?? new List<detalles>();
+
+                    dataGridViewDet.DataSource = null; // Limpia el DataGridView
+
+                    if (programaciones.Count > 0)
+                    {
+                        dataGridViewDet.DataSource = programaciones;
+                    }
+
+                    ConfigurarDataGridView(); // 🔹 Configurar siempre después de asignar datos
+
+                    dataGridViewDet.Refresh();
+                }
+                else
+                {
+                    dataGridViewDet.DataSource = null;
+                    ConfigurarDataGridView();
+                    dataGridViewDet.Refresh();
+                }
+            }
+        }
+
+
+
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            SesionUsuario.CerrarSesion();
+            // Cierra la aplicación
+            Application.Exit();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Form formMenu = this.MdiParent;
+            RegistroProg registro = RegistroProg.GetInstance(formMenu);
+            registro.Show();
+            this.Close();
+        }
+
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validar que los campos no estén vacíos
+                if (
+                    string.IsNullOrWhiteSpace(txtDescrip.Text) ||
+                    txtCategoria.SelectedIndex == 0
+                    )
+                {
+                    MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; // Detiene la ejecución del método
+                }
+
+                //definir la hora de inicio del programa, si hay ultimaHora se usa esa, si no se usa la recibida al cargar el componente
+                TimeSpan fechaInicioPrograma = (this.ultimaHora != TimeSpan.Zero && this.ultimaDuracion > 0)
+                ? this.ultimaHora
+                : this.hora;
+
+                //obtener duración a guardar
+                int duracionPrograma = (int)numericUpDown1.Value;
+                //calcular la hora de finalización
+                this.ultimaHora = fechaInicioPrograma.Add(TimeSpan.FromMinutes(duracionPrograma));
+                //se asigna la fecha de finalización al label de hora 
+                lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
+
+                string fechaHoraString = nuevafecha; // La fecha recibida al construir el formulario
+                                                     // Reemplazar "p. m." y "a. m." por "PM" y "AM"
+                fechaHoraString = fechaHoraString.Replace(" p. m.", " PM").Replace(" a. m.", " AM");
+                // Intentar convertir la fechaHoraString a DateTime en formato de 24 horas
+                DateTime fechaHoraOriginal;
+                if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
+                {
+                    // Sumamos la nueva hora (this.hora) a la fecha original
+                    DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(fechaInicioPrograma);
+                    //// Guardar la nueva fecha y hora en la base de datos
+                    //GuardarFechaHoraEnBaseDeDatos(nuevaFechaHora);
+                    //MessageBox.Show("Fecha y hora actualizada correctamente: " + nuevaFechaHora.ToString());
+                    // Validar que los campos no estén vacíos
+                    if (txtCategoria.SelectedIndex == -1)
+                    {
+                        MessageBox.Show("Por favor, seleccione una opción.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    if (string.IsNullOrWhiteSpace(txtDescrip.Text))
+                    {
+                        MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return; // Detiene la ejecución del método
+                    }
+                    DetProgra nuevoProg = new DetProgra
+                    {
+                        // NO SE ENVÍA iD_USUARIO (se genera en la BD)
+                        reG_ID = idRegistro,
+                        u_DET_DES = txtDescrip.Text,
+                        tipO_ID = Convert.ToInt32(txtCategoria.SelectedValue),
+                        tiempo = duracionPrograma,
+                        hora = nuevaFechaHora,
+                        usuariO_REG = SesionUsuario.Usuario,
+                        fechA_REG = DateTime.Now
+                    };
+                    if (await InsertarDetProgramacionEnAPI(nuevoProg))
+                    {   // URL de la API
+                        string apiUrl = $"http://192.168.10.176/detalleprog/{idRegistro}";
+                        this.ultimaDuracion = duracionPrograma;
+
+                        await LimpiarForm(); // Limpiar formulario después de insertar
+                        await CargarCategorias(); // Recargar los datos en el DataGridView
+                        await RefrescarDesdeAPI(apiUrl);
+                        ConfigurarDataGridView();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error al convertir la fecha. Formato incorrecto.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocurrió un error: " + ex.Message);
+            }
+        }
+
+        private async Task<bool> InsertarDetProgramacionEnAPI(DetProgra progra)
+        {
+            try
+            {
+                string apiUrl = "http://192.168.10.176/insertardetprogramacion";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    // Eliminar ID_USUARIO al serializar
+                    string json = JsonConvert.SerializeObject(progra, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore // Ignorar valores nulos
+                    });
+
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Programa agregado correctamente.");
+                        return true;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error al agregar programa: {response.ReasonPhrase}");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al agregar  programa: {ex.Message}");
+                return false;
+            }
+        }
+
+        private async Task LimpiarForm()
+        {
+            txtID.Text = string.Empty;
+            txtDescrip.Text = string.Empty;
+            numericUpDown1.Value = 0;
+            // Seleccionar la primera opción del ComboBox
+            txtCategoria.SelectedIndex = 0;
+        }
+
+        private void dataGridViewDet_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Verifica que el clic no sea en el encabezado
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0 && e.ColumnIndex < dataGridViewDet.Columns.Count)
+            {
+                // Verifica que la fila esté dentro del rango de programaciones
+                if (e.RowIndex < programaciones.Count)
+                {
+                    // Verifica si se hizo clic en la columna del botón
+                    if (dataGridViewDet.Columns[e.ColumnIndex].Name == "btnUbicacion")
+                    {
+                        string ruta = programaciones[e.RowIndex].categoriaRuta;
+
+                        if (!string.IsNullOrEmpty(ruta))
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start("explorer.exe", ruta);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error al abrir la ubicación: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("No hay una ruta válida para esta categoría.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    else
+                    {
+                        // Obtener el detalle seleccionado
+                        detalleSeleccionado = programaciones[e.RowIndex];
+
+                        // Mostrar los datos en los controles de edición
+                        txtID.Text = detalleSeleccionado.deT_ID.ToString();
+                        txtDescrip.Text = detalleSeleccionado.u_DET_DES;
+                        numericUpDown1.Value = detalleSeleccionado.tiempo;
+                        SeleccionarCategoriaEnComboBox(detalleSeleccionado.tipO_ID);
+                    }
+                }
+            }
+        }
+
+        // Seleccionar el rol en el ComboBox
+        private void SeleccionarCategoriaEnComboBox(int catID)
+        {
+            foreach (Categoria cat in txtCategoria.Items)
+            {
+                if (cat.id == catID)
+                {
+                    txtCategoria.SelectedItem = cat;
+                    break;
+                }
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            if (detalleSeleccionado != null || txtID.Text != "")
+            {
+                var ultimoItem = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+                if (ultimoItem != null && ultimoItem.deT_ID != detalleSeleccionado.deT_ID)
+                {
+                    MessageBox.Show("Solo se puede actualizar el último programa de la carta.");
+                    return;
+                }
+
+                // Actualizar los datos del usuario seleccionado
+                detalleSeleccionado.deT_ID = Int32.Parse(txtID.Text);
+                detalleSeleccionado.u_DET_DES = txtDescrip.Text;
+                detalleSeleccionado.tiempo = Convert.ToInt32(numericUpDown1.Value);
+
+
+
+                // Obtener categoria seleccionado en el ComboBox
+                if (txtCategoria.SelectedItem != null)
+                {
+                    Categoria catSeleccionado = (Categoria)txtCategoria.SelectedItem;
+                    detalleSeleccionado.tipO_ID = catSeleccionado.id;
+                }
+
+
+                int minutosParaSumar = (int)numericUpDown1.Value;
+
+                // Sumar los minutos a la hora actual (this.horaInicio)
+                this.hora = this.hora.Add(TimeSpan.FromMinutes(minutosParaSumar));
+
+                // Mostrar la hora actualizada en el control
+                lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
+
+                // Usar fechaHoraString recibida en el constructor
+                string fechaHoraString = nuevafecha; // La fecha recibida al construir el formulario
+
+                // Reemplazar "p. m." y "a. m." por "PM" y "AM"
+                fechaHoraString = fechaHoraString.Replace(" p. m.", " PM").Replace(" a. m.", " AM");
+
+                // Intentar convertir la fechaHoraString a DateTime en formato de 24 horas
+                DateTime fechaHoraOriginal;
+
+                if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
+                {
+                    // Sumamos la nueva hora (this.horaInicio) a la fecha original
+                    DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(this.hora);
+
+                    DetProgra detProg = new DetProgra
+                    {
+                        // NO SE ENVÍA iD_USUARIO (se genera en la BD)
+                        deT_ID = detalleSeleccionado.deT_ID,
+                        reG_ID = detalleSeleccionado.reG_ID,
+                        u_DET_DES = detalleSeleccionado.u_DET_DES,
+                        tipO_ID = detalleSeleccionado.tipO_ID,
+                        tiempo = minutosParaSumar,
+                        hora = nuevaFechaHora,
+                        usuariO_MOD = SesionUsuario.Usuario,
+                        fechA_MOD = DateTime.Now
+
+                    };
+
+                    // Enviar los datos actualizados a la API
+                    bool resultado = await ActualizarDetEnAPI(detProg);
+
+                    if (resultado)
+                    {
+                        MessageBox.Show("Programa actualizado correctamente.");
+                        string apiUrl = $"http://192.168.10.176/detalleprog/{detalleSeleccionado.reG_ID}";
+                        await LimpiarForm(); // Limpiar formulario después de insertar
+                        await CargarCategorias(); // Recargar los datos en el DataGridView
+                        await RefrescarDesdeAPI(apiUrl);
+                        ConfigurarDataGridView();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al actualizar el registro.");
+                    }
+
+                }
+
+
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un programa para actualizar.");
+            }
+        }
+
+        private async Task<bool> ActualizarDetEnAPI(DetProgra det)
+        {
+            try
+            {
+                // URL de la API para actualizar el usuario
+                string apiUrl = $"http://192.168.10.176/actdet/{det.deT_ID}";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    // Serializar el objeto usuario a JSON
+                    string json = JsonConvert.SerializeObject(det);
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    // Enviar solicitud PUT a la API
+                    HttpResponseMessage response = await client.PatchAsync(apiUrl, content);
+                    //HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+                    Console.WriteLine(response.Content);
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        return true; // Actualización exitosa
+
+                    }
+                    else
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        dynamic errorDetails = JsonConvert.DeserializeObject(errorResponse);
+                        MessageBox.Show($"Error: {errorDetails.title}\nDetalles: {errorDetails.errors}");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al actualizar  programación: {ex.Message}");
+                return false;
+            }
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            if (detalleSeleccionado != null || txtID.Text != "")
+            {
+                var ultimoItem = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+                if(ultimoItem != null && ultimoItem.deT_ID != detalleSeleccionado.deT_ID)
+                {
+                    MessageBox.Show("Solo se puede eliminar el último programa de la carta.");
+                    return;
+                }
+
+                // Actualizar los datos del usuario seleccionado
+                detalleSeleccionado.deT_ID = Int32.Parse(txtID.Text);
+                detalleSeleccionado.u_DET_DES = txtDescrip.Text;
+                detalleSeleccionado.tiempo = Convert.ToInt32(numericUpDown1.Value);
+
+                // Obtener el rol seleccionado en el ComboBox
+                if (txtCategoria.SelectedItem != null)
+                {
+                    Categoria rolSeleccionado = (Categoria)txtCategoria.SelectedItem;
+                    detalleSeleccionado.tipO_ID = rolSeleccionado.id;
+                }
+
+
+
+                // Enviar los datos actualizados a la API
+                bool resultado = await EliminarDetProgramacionEnAPI(detalleSeleccionado.deT_ID);
+
+                if (resultado)
+                {
+                    string apiUrl = $"http://192.168.10.176/detalleprog/{detalleSeleccionado.reG_ID}";
+                    MessageBox.Show("Programación eliminada correctamente.");
+                    var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+
+                    if (ultimoPrograma != null)
+                    {
+                        this.ultimaHora = ultimoPrograma.hora.TimeOfDay;
+                        this.ultimaDuracion = ultimoPrograma.tiempo;
+                        lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
+                    }
+                    else
+                    {
+                        this.ultimaHora = TimeSpan.Zero;
+                        this.ultimaDuracion = 0;
+                        lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
+                    }
+
+                    await LimpiarForm(); // Limpiar formulario después de insertar
+                    await CargarCategorias(); // Recargar los datos en el DataGridView
+                    await RefrescarDesdeAPI(apiUrl);
+                    ConfigurarDataGridView();
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar  programación.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecciona un programa para actualizar.");
+            }
+        }
+
+        private async Task<bool> EliminarDetProgramacionEnAPI(int id)
+        {
+            try
+            {
+                // URL de la API para actualizar el usuario
+                string apiUrl = $"http://192.168.10.176/borrardetprog/{id}";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    var progra = new DetProgra();
+                    string json = JsonConvert.SerializeObject(progra);
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    // Enviar solicitud PUT a la API
+                    HttpResponseMessage response = await client.PatchAsync(apiUrl, content);
+                    //HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        return true; // Eliminación exitosa
+
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error al eliminar programación: {response.ReasonPhrase}");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar  programación: {ex.Message}");
+                return false;
+            }
+        }
+
+        private async void button6_Click(object sender, EventArgs e)
+        {
+            await LimpiarForm(); // Limpiar formulario
+        }
+
+        private void dataGridViewDet_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            // Alternar colores: filas impares de un color, filas pares de otro color
+            if (e.RowIndex % 2 == 0)
+            {
+                dataGridViewDet.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray; // Color para filas pares
+            }
+            else
+            {
+                dataGridViewDet.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White; // Color para filas impares
+            }
+        }
+    }
+
+    public class DetProgra
+    {
+        public int deT_ID { get; set; }       // Coincide con "deT_ID"
+
+        public int reG_ID { get; set; }       // Coincide con "deT_ID"
+        public string u_DET_DES { get; set; }       // Coincide con "u_DET_DES"
+        public int tipO_ID { get; set; }       // Coincide con "tipO_ID"
+        public int tiempo { get; set; }       // Coincide con "tiempo"
+        public DateTime hora { get; set; }   // Solo la hora (timestamp)
+        public string? usuariO_REG { get; set; }       // Coincide con "usuariO_REG"
+        public DateTime? fechA_REG { get; set; }     // Coincide con "fechA_REG"
+        public string? usuariO_MOD { get; set; }       // Coincide con "usuariO_REG"
+        public DateTime? fechA_MOD { get; set; }     // Coincide con "fechA_REG"
+
+    }
+
+    public class detalles
+    {
+        public int deT_ID { get; set; }
+        public int reG_ID { get; set; }
+        public string u_DET_DES { get; set; }
+        public int tipO_ID { get; set; }
+        public int tiempo { get; set; }
+        public DateTime hora { get; set; }
+        public string categoriaRuta { get; set; }
+
+    }
+
+}
