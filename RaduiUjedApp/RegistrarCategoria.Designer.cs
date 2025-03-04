@@ -39,6 +39,7 @@
             txtID = new TextBox();
             label4 = new Label();
             button5 = new Button();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCategoria).BeginInit();
             SuspendLayout();
             // 
@@ -153,11 +154,22 @@
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
+            // button3
+            // 
+            button3.Location = new Point(646, 128);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 13;
+            button3.Text = "Examinar...";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
+            // 
             // RegistrarCategoria
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 427);
+            Controls.Add(button3);
             Controls.Add(button5);
             Controls.Add(label4);
             Controls.Add(txtID);
@@ -190,5 +202,6 @@
         private TextBox txtID;
         private Label label4;
         private Button button5;
+        private Button button3;
     }
 }

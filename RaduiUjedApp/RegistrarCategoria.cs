@@ -275,6 +275,29 @@ namespace RaduiUjedApp
         {
             await LimpiarForm();
         }
+        
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            Categoria catSeleccionado = categorias.FirstOrDefault(c => c.id == 1);
+
+            
+
+            using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.Description = "Selecciona una carpeta";
+
+                // Si la ruta no es null ni vacía, se usa; si no, se deja sin establecer
+                if (!string.IsNullOrWhiteSpace(catSeleccionado?.ruta))
+                {
+                    folderDialog.SelectedPath = catSeleccionado.ruta;
+                }
+
+                if (folderDialog.ShowDialog() == DialogResult.OK)
+                {
+                    txtRuta.Text = folderDialog.SelectedPath; // Guarda la carpeta seleccionada
+                }
+            }
+        }
     }
 
     // Clase que representa una categoria
