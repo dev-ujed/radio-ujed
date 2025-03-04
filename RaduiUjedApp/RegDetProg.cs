@@ -316,10 +316,6 @@ namespace RaduiUjedApp
             }
         }
 
-
-
-
-
         private void button5_Click(object sender, EventArgs e)
         {
             SesionUsuario.CerrarSesion();
@@ -523,39 +519,46 @@ namespace RaduiUjedApp
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            if (detalleSeleccionado != null || txtID.Text != "")
+            // Validar que los campos no estén vacíos
+            if (string.IsNullOrWhiteSpace(txtDescrip.Text) || txtCategoria.SelectedIndex == 0)
             {
-                var ultimoItem = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
-                if (ultimoItem != null && ultimoItem.deT_ID != detalleSeleccionado.deT_ID)
-                {
-                    MessageBox.Show("Solo se puede actualizar el último programa de la carta.");
-                    return;
-                }
+                MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                // Actualizar los datos del usuario seleccionado
-                detalleSeleccionado.deT_ID = Int32.Parse(txtID.Text);
-                detalleSeleccionado.u_DET_DES = txtDescrip.Text;
-                detalleSeleccionado.tiempo = Convert.ToInt32(numericUpDown1.Value);
+            // Verificar que detalleSeleccionado no sea nulo
+            if (detalleSeleccionado == null)
+            {
+                MessageBox.Show("Selecciona un programa para actualizar.");
+                return;
+            }
 
+            // Obtener categoria seleccionada en el ComboBox
+            if (txtCategoria.SelectedItem != null)
+            {
+                Categoria catSeleccionado = (Categoria)txtCategoria.SelectedItem;
+                detalleSeleccionado.tipO_ID = catSeleccionado.id;
+            }
 
+            var nuevaDescripción = txtDescrip.Text;
+            var nuevoTiempo = Convert.ToInt32(numericUpDown1.Value);
 
-                // Obtener categoria seleccionado en el ComboBox
-                if (txtCategoria.SelectedItem != null)
-                {
-                    Categoria catSeleccionado = (Categoria)txtCategoria.SelectedItem;
-                    detalleSeleccionado.tipO_ID = catSeleccionado.id;
-                }
+            // Buscar el programa original
+            var programaOriginal = programaciones.FirstOrDefault(p => p.deT_ID == detalleSeleccionado.deT_ID);
 
+            // Validar que se haya encontrado un programa original
+            if (programaOriginal == null)
+            {
+                MessageBox.Show("No se encontró el programa original.");
+                return;
+            }
 
-                int minutosParaSumar = (int)numericUpDown1.Value;
+            // Si el tiempo es diferente, actualizar
+            if (programaOriginal.tiempo != nuevoTiempo)
+            {
+                // Verificar si hay elementos después para actualizar
+                var programacionesDespues = programaciones.Where(p => p.hora > programaOriginal.hora).ToList();
 
-                // Sumar los minutos a la hora actual (this.horaInicio)
-                this.hora = this.hora.Add(TimeSpan.FromMinutes(minutosParaSumar));
-
-                // Mostrar la hora actualizada en el control
-                lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
-
-                // Usar fechaHoraString recibida en el constructor
                 string fechaHoraString = nuevafecha; // La fecha recibida al construir el formulario
 
                 // Reemplazar "p. m." y "a. m." por "PM" y "AM"
@@ -566,21 +569,16 @@ namespace RaduiUjedApp
 
                 if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
                 {
-                    // Sumamos la nueva hora (this.horaInicio) a la fecha original
-                    DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(this.hora);
-
                     DetProgra detProg = new DetProgra
                     {
-                        // NO SE ENVÍA iD_USUARIO (se genera en la BD)
                         deT_ID = detalleSeleccionado.deT_ID,
                         reG_ID = detalleSeleccionado.reG_ID,
-                        u_DET_DES = detalleSeleccionado.u_DET_DES,
+                        u_DET_DES = nuevaDescripción,
                         tipO_ID = detalleSeleccionado.tipO_ID,
-                        tiempo = minutosParaSumar,
-                        hora = nuevaFechaHora,
+                        tiempo = nuevoTiempo,
+                        hora = detalleSeleccionado.hora,
                         usuariO_MOD = SesionUsuario.Usuario,
                         fechA_MOD = DateTime.Now
-
                     };
 
                     // Enviar los datos actualizados a la API
@@ -588,26 +586,75 @@ namespace RaduiUjedApp
 
                     if (resultado)
                     {
+                        TimeSpan horaFinalPrograma = detalleSeleccionado.hora.TimeOfDay.Add(TimeSpan.FromMinutes(nuevoTiempo));
+
+                        for (int i = 0; i < programacionesDespues.Count; i++)
+                        {
+                            if (i == 0)
+                            {
+                                await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                            }
+                            else
+                            {
+                                horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
+                                await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                            }
+                        }
+
+                        // Actualizar el formulario
+                        await ActualizarFormulario();
+
+                        var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+                        this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
+                        this.ultimaDuracion = ultimoPrograma.tiempo;
+                        lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
+
                         MessageBox.Show("Programa actualizado correctamente.");
-                        string apiUrl = $"http://192.168.10.176/detalleprog/{detalleSeleccionado.reG_ID}";
-                        await LimpiarForm(); // Limpiar formulario después de insertar
-                        await CargarCategorias(); // Recargar los datos en el DataGridView
-                        await RefrescarDesdeAPI(apiUrl);
-                        ConfigurarDataGridView();
+
                     }
                     else
                     {
                         MessageBox.Show("Error al actualizar el registro.");
                     }
-
                 }
-
-
             }
             else
             {
-                MessageBox.Show("Selecciona un programa para actualizar.");
+                // Si el tiempo no ha cambiado, solo actualizar la descripción
+                DetProgra detProg = new DetProgra
+                {
+                    deT_ID = detalleSeleccionado.deT_ID,
+                    reG_ID = detalleSeleccionado.reG_ID,
+                    u_DET_DES = nuevaDescripción,
+                    tipO_ID = detalleSeleccionado.tipO_ID,
+                    tiempo = detalleSeleccionado.tiempo,
+                    hora = detalleSeleccionado.hora,
+                    usuariO_MOD = SesionUsuario.Usuario,
+                    fechA_MOD = DateTime.Now
+                };
+
+                // Enviar los datos actualizados a la API
+                bool resultado = await ActualizarDetEnAPI(detProg);
+
+                if (resultado)
+                {
+                    MessageBox.Show("Programa actualizado correctamente.");
+                    await ActualizarFormulario();
+                }
+                else
+                {
+                    MessageBox.Show("Error al actualizar el registro.");
+                }
             }
+        }
+
+        private async Task ActualizarFormulario()
+        {
+            string apiUrl = $"http://192.168.10.176/detalleprog/{detalleSeleccionado.reG_ID}";
+            await LimpiarForm(); // Limpiar formulario después de insertar
+            await CargarCategorias(); // Recargar los datos en el DataGridView
+            await RefrescarDesdeAPI(apiUrl);
+            ConfigurarDataGridView();
         }
 
         private async Task<bool> ActualizarDetEnAPI(DetProgra det)
@@ -768,7 +815,55 @@ namespace RaduiUjedApp
                 dataGridViewDet.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White; // Color para filas impares
             }
         }
+
+        private async Task actualizarProgramasDespues(detalles Programa, TimeSpan horaInicioPrograma)
+        {
+
+            string fechaHoraString = nuevafecha; // La fecha recibida al construir el formulario
+
+            // Reemplazar "p. m." y "a. m." por "PM" y "AM"
+            fechaHoraString = fechaHoraString.Replace(" p. m.", " PM").Replace(" a. m.", " AM");
+
+            DateTime fechaHoraOriginal;
+
+            if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
+            {
+                // Sumamos la nueva hora (this.horaInicio) a la fecha original
+                DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(horaInicioPrograma); 
+
+                DetProgra detProg = new DetProgra
+                {
+                    // NO SE ENVÍA iD_USUARIO (se genera en la BD)
+                    deT_ID = Programa.deT_ID,
+                    reG_ID = Programa.reG_ID,
+                    u_DET_DES = Programa.u_DET_DES,
+                    tipO_ID = Programa.tipO_ID,
+                    tiempo = Programa.tiempo,
+                    hora = nuevaFechaHora,
+                    usuariO_MOD = SesionUsuario.Usuario,
+                    fechA_MOD = DateTime.Now
+
+                };
+
+                // Enviar los datos actualizados a la API
+                bool resultado = await ActualizarDetEnAPI(detProg);
+
+                if (resultado)
+                {
+                    string apiUrl = $"http://192.168.10.176/detalleprog/{Programa.reG_ID}";
+                    await CargarCategorias();
+                    await RefrescarDesdeAPI(apiUrl);
+                    ConfigurarDataGridView();
+                }
+                else
+                {
+                    MessageBox.Show("Error al actualizar el registro.");
+                }
+
+            }
+        }
     }
+
 
     public class DetProgra
     {
