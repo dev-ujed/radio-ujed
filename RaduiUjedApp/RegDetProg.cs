@@ -655,6 +655,7 @@ namespace RaduiUjedApp
             await CargarCategorias(); // Recargar los datos en el DataGridView
             await RefrescarDesdeAPI(apiUrl);
             ConfigurarDataGridView();
+
         }
 
         private async Task<bool> ActualizarDetEnAPI(DetProgra det)
@@ -702,53 +703,47 @@ namespace RaduiUjedApp
         {
             if (detalleSeleccionado != null || txtID.Text != "")
             {
-                var ultimoItem = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
-                if(ultimoItem != null && ultimoItem.deT_ID != detalleSeleccionado.deT_ID)
-                {
-                    MessageBox.Show("Solo se puede eliminar el último programa de la carta.");
-                    return;
-                }
+                var programacionesDespues = programaciones.Where(p => p.hora > detalleSeleccionado.hora).ToList();
+                var programaAnterior = programaciones.FirstOrDefault(p => p.hora < detalleSeleccionado.hora);
 
-                // Actualizar los datos del usuario seleccionado
-                detalleSeleccionado.deT_ID = Int32.Parse(txtID.Text);
-                detalleSeleccionado.u_DET_DES = txtDescrip.Text;
-                detalleSeleccionado.tiempo = Convert.ToInt32(numericUpDown1.Value);
-
-                // Obtener el rol seleccionado en el ComboBox
-                if (txtCategoria.SelectedItem != null)
-                {
-                    Categoria rolSeleccionado = (Categoria)txtCategoria.SelectedItem;
-                    detalleSeleccionado.tipO_ID = rolSeleccionado.id;
-                }
-
-
-
-                // Enviar los datos actualizados a la API
                 bool resultado = await EliminarDetProgramacionEnAPI(detalleSeleccionado.deT_ID);
 
                 if (resultado)
                 {
-                    string apiUrl = $"http://192.168.10.176/detalleprog/{detalleSeleccionado.reG_ID}";
+                    TimeSpan horaFinalPrograma = this.hora;
+
+                    if (programaAnterior != null)
+                        horaFinalPrograma = programaAnterior.hora.TimeOfDay.Add(TimeSpan.FromMinutes(programaAnterior.tiempo));
+
+                    for (int i = 0; i < programacionesDespues.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                        }
+                        else
+                        {
+                            horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
+                            await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                        }
+                    }
+
+                    await ActualizarFormulario();
                     MessageBox.Show("Programación eliminada correctamente.");
                     var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
 
                     if (ultimoPrograma != null)
                     {
-                        this.ultimaHora = ultimoPrograma.hora.TimeOfDay;
+                        this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
                         this.ultimaDuracion = ultimoPrograma.tiempo;
-                        lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
+                        lblHora.Text = $"Hora: {this.ultimaHora:hh\\:mm\\:ss}";
                     }
                     else
                     {
                         this.ultimaHora = TimeSpan.Zero;
                         this.ultimaDuracion = 0;
-                        lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
+                        lblHora.Text = $"Hora: {this.hora:hh\\:mm\\:ss}";
                     }
-
-                    await LimpiarForm(); // Limpiar formulario después de insertar
-                    await CargarCategorias(); // Recargar los datos en el DataGridView
-                    await RefrescarDesdeAPI(apiUrl);
-                    ConfigurarDataGridView();
                 }
                 else
                 {
