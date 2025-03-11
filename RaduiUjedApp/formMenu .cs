@@ -21,21 +21,32 @@ namespace RaduiUjedApp
 
         }
         private Label labelSelecionado;
+        private Form formularioActual;
+
+        private void AbrirFormulario(Form nuevoFormulario)
+        {
+            if (formularioActual != null && !formularioActual.IsDisposed)
+            {
+                formularioActual.Close(); 
+            }
+
+            formularioActual = nuevoFormulario;
+            formularioActual.MdiParent = this; 
+            formularioActual.FormBorderStyle = FormBorderStyle.None;
+            formularioActual.Dock = DockStyle.Fill;
+            formularioActual.Show();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             // Redirige a la pantalla de registrar y modificar usuario
-            usuarios();
+            AbrirFormulario(new registroUsuario());
             CambiarLabel(sender);
         }
-        public void usuarios()
-        {
-            registroUsuario user = registroUsuario.GetInstance(this);
-            user.Show();
-        }
+        
         private void button2_Click(object sender, EventArgs e)
         {
             // Redirige a la pantalla de registrar programación
-            MostrarRegistroPro();
+            AbrirFormulario(new RegistroProg());
             CambiarLabel(sender);
         }
         public void MostrarRegistroPro()
@@ -46,14 +57,10 @@ namespace RaduiUjedApp
         private void button3_Click(object sender, EventArgs e)
         {
             // Redirige a la pantalla de ver programación
-            verProgrmacion();
+            AbrirFormulario(new VerProg());
             CambiarLabel(sender);
         }
-        public void verProgrmacion()
-        {
-            VerProg ver = VerProg.GetInstance(this);
-            ver.Show();
-        }
+        
         private void button4_Click(object sender, EventArgs e)
         {
             SesionUsuario.CerrarSesion();
@@ -66,14 +73,10 @@ namespace RaduiUjedApp
         private void button5_Click(object sender, EventArgs e)
         {
             // Redirige a la pantalla de registro de categorias
-            categorias();
+            AbrirFormulario(new RegistrarCategoria());
             CambiarLabel(sender);
         }
-        public void categorias()
-        {
-            RegistrarCategoria cat = RegistrarCategoria.GetInstance(this);
-            cat.Show();
-        }
+        
         public void CambiarLabel(object label)
         {
             var lb = (Label)label;

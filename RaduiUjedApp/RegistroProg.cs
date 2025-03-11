@@ -23,19 +23,16 @@ namespace RaduiUjedApp
         private static RegistroProg instance;
         public static RegistroProg GetInstance(Form contendorPadre)
         {
-            if (instance == null || instance.IsDisposed)
+            if (instance != null && !instance.IsDisposed)
             {
-                instance = new RegistroProg();
-                instance.MdiParent = contendorPadre;
-                instance.FormBorderStyle = FormBorderStyle.None;
-                instance.Dock = DockStyle.Fill;
+                instance.Close(); // Cierra la instancia previa si existe
             }
-            else
-            {
-                if (instance.WindowState == FormWindowState.Minimized)
-                    instance.WindowState = FormWindowState.Normal;
-                instance.BringToFront();
-            }
+
+            instance = new RegistroProg();
+            instance.MdiParent = contendorPadre;
+            instance.FormBorderStyle = FormBorderStyle.None;
+            instance.Dock = DockStyle.Fill;
+
             return instance;
         }
         private void button3_Click(object sender, EventArgs e)

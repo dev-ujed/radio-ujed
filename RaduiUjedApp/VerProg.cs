@@ -33,19 +33,16 @@ namespace RaduiUjedApp
         private static VerProg instance;
         public static VerProg GetInstance(Form contendorPadre)
         {
-            if (instance == null || instance.IsDisposed)
+            if (instance != null && !instance.IsDisposed)
             {
-                instance = new VerProg();
-                instance.MdiParent = contendorPadre;
-                instance.FormBorderStyle = FormBorderStyle.None;
-                instance.Dock = DockStyle.Fill;
+                instance.Close(); // Cierra la instancia previa si existe
             }
-            else
-            {
-                if (instance.WindowState == FormWindowState.Minimized)
-                    instance.WindowState = FormWindowState.Normal;
-                instance.BringToFront();
-            }
+
+            instance = new VerProg();
+            instance.MdiParent = contendorPadre;
+            instance.FormBorderStyle = FormBorderStyle.None;
+            instance.Dock = DockStyle.Fill;
+
             return instance;
         }
         private async void VerProg_Load(object sender, EventArgs e)
