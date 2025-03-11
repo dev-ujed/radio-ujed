@@ -79,24 +79,15 @@ namespace RaduiUjedApp
 
         public static RegDetProg GetInstance(Form contenedorPadre, int id, string fechaHoraString)
         {
-            if (instance == null || instance.IsDisposed)
+            if (instance != null && !instance.IsDisposed)
             {
-                instance = new RegDetProg(id, fechaHoraString);
-                instance.MdiParent = contenedorPadre;
-                instance.FormBorderStyle = FormBorderStyle.None;
-                instance.Dock = DockStyle.Fill;
+                instance.Close(); // Cierra el formulario si ya existe
             }
-            else
-            {
-                // Si la ventana ya existe, actualizar los datos
-                instance.idRegistro = id;
-                instance.nuevafecha = fechaHoraString;
-                instance.lblHora.Text = "Hora: " + fechaHoraString;
 
-                if (instance.WindowState == FormWindowState.Minimized)
-                    instance.WindowState = FormWindowState.Normal;
-                instance.BringToFront();
-            }
+            instance = new RegDetProg(id, fechaHoraString);
+            instance.MdiParent = contenedorPadre;
+            instance.FormBorderStyle = FormBorderStyle.None;
+            instance.Dock = DockStyle.Fill;
 
             return instance;
         }

@@ -21,19 +21,16 @@ namespace RaduiUjedApp
         private static registroUsuario instance;
         public static registroUsuario GetInstance(Form contendorPadre)
         {
-            if (instance == null || instance.IsDisposed)
+            if (instance != null && !instance.IsDisposed)
             {
-                instance = new registroUsuario();
-                instance.MdiParent = contendorPadre;
-                instance.FormBorderStyle = FormBorderStyle.None;
-                instance.Dock = DockStyle.Fill;
+                instance.Close(); // Cierra la instancia previa si existe
             }
-            else
-            {
-                if (instance.WindowState == FormWindowState.Minimized)
-                    instance.WindowState = FormWindowState.Normal;
-                instance.BringToFront();
-            }
+
+            instance = new registroUsuario();
+            instance.MdiParent = contendorPadre;
+            instance.FormBorderStyle = FormBorderStyle.None;
+            instance.Dock = DockStyle.Fill;
+
             return instance;
         }
         private async void registroUsuario_Load(object sender, EventArgs e)
