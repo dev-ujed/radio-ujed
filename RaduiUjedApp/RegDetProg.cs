@@ -134,7 +134,7 @@ namespace RaduiUjedApp
                     }
                 }
 
-                if(this.ultimaHora != TimeSpan.Zero)
+                if (this.ultimaHora != TimeSpan.Zero)
                 {
                     lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
                 }
@@ -329,7 +329,7 @@ namespace RaduiUjedApp
                 // Validar que los campos no estén vacíos
                 if (
                     string.IsNullOrWhiteSpace(txtDescrip.Text) ||
-                    txtCategoria.SelectedIndex == 0
+                    txtCategoria.SelectedIndex == null || string.IsNullOrWhiteSpace(txtRuta.Text)
                     )
                 {
                     MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -379,7 +379,9 @@ namespace RaduiUjedApp
                         tiempo = duracionPrograma,
                         hora = nuevaFechaHora,
                         usuariO_REG = SesionUsuario.Usuario,
-                        fechA_REG = DateTime.Now
+                        fechA_REG = DateTime.Now,
+                        url = txtRuta.Text
+
                     };
                     if (await InsertarDetProgramacionEnAPI(nuevoProg))
                     {   // URL de la API
@@ -447,6 +449,7 @@ namespace RaduiUjedApp
             txtID.Text = string.Empty;
             txtDescrip.Text = string.Empty;
             numericUpDown1.Value = 0;
+            txtRuta.Text = string.Empty;
             // Seleccionar la primera opción del ComboBox
             txtCategoria.SelectedIndex = 0;
         }
@@ -462,7 +465,8 @@ namespace RaduiUjedApp
                     // Verifica si se hizo clic en la columna del botón
                     if (dataGridViewDet.Columns[e.ColumnIndex].Name == "btnUbicacion")
                     {
-                        string ruta = programaciones[e.RowIndex].categoriaRuta;
+                        //string ruta = programaciones[e.RowIndex].categoriaRuta;
+                        string ruta = programaciones[e.RowIndex].url;
 
                         if (!string.IsNullOrEmpty(ruta))
                         {
@@ -490,6 +494,7 @@ namespace RaduiUjedApp
                         txtDescrip.Text = detalleSeleccionado.u_DET_DES;
                         numericUpDown1.Value = detalleSeleccionado.tiempo;
                         SeleccionarCategoriaEnComboBox(detalleSeleccionado.tipO_ID);
+                        txtRuta.Text = detalleSeleccionado.url;
                     }
                 }
             }
@@ -533,6 +538,7 @@ namespace RaduiUjedApp
 
             var nuevaDescripción = txtDescrip.Text;
             var nuevoTiempo = Convert.ToInt32(numericUpDown1.Value);
+            var nuevaRuta = txtRuta.Text;
 
             // Buscar el programa original
             var programaOriginal = programaciones.FirstOrDefault(p => p.deT_ID == detalleSeleccionado.deT_ID);
@@ -569,7 +575,8 @@ namespace RaduiUjedApp
                         tiempo = nuevoTiempo,
                         hora = detalleSeleccionado.hora,
                         usuariO_MOD = SesionUsuario.Usuario,
-                        fechA_MOD = DateTime.Now
+                        fechA_MOD = DateTime.Now,
+                        url = nuevaRuta
                     };
 
                     // Enviar los datos actualizados a la API
@@ -621,9 +628,9 @@ namespace RaduiUjedApp
                     tiempo = detalleSeleccionado.tiempo,
                     hora = detalleSeleccionado.hora,
                     usuariO_MOD = SesionUsuario.Usuario,
-                    fechA_MOD = DateTime.Now
+                    fechA_MOD = DateTime.Now,
+                    url = nuevaRuta
                 };
-
                 // Enviar los datos actualizados a la API
                 bool resultado = await ActualizarDetEnAPI(detProg);
 
@@ -815,7 +822,7 @@ namespace RaduiUjedApp
             if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
             {
                 // Sumamos la nueva hora (this.horaInicio) a la fecha original
-                DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(horaInicioPrograma); 
+                DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(horaInicioPrograma);
 
                 DetProgra detProg = new DetProgra
                 {
@@ -827,7 +834,8 @@ namespace RaduiUjedApp
                     tiempo = Programa.tiempo,
                     hora = nuevaFechaHora,
                     usuariO_MOD = SesionUsuario.Usuario,
-                    fechA_MOD = DateTime.Now
+                    fechA_MOD = DateTime.Now,
+                    url = Programa.url
 
                 };
 
@@ -848,6 +856,37 @@ namespace RaduiUjedApp
 
             }
         }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            if (txtCategoria.SelectedItem != null)
+            {
+                Categoria categoriaSeleccionada = (Categoria)txtCategoria.SelectedItem;
+                string rutaSeleccionada = categoriaSeleccionada.ruta;
+                using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+                {
+                    if (!string.IsNullOrEmpty(rutaSeleccionada) && Directory.Exists(rutaSeleccionada))
+                    {
+                        rutaSeleccionada += "\\";
+                        folderDialog.SelectedPath = rutaSeleccionada; // Establece la carpeta inicial
+                    }
+                    if (folderDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        txtRuta.Text = folderDialog.SelectedPath;
+                    }
+                }
+            }
+        }
+
+        private void dataGridViewDet_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 
 
@@ -865,6 +904,8 @@ namespace RaduiUjedApp
         public string? usuariO_MOD { get; set; }       // Coincide con "usuariO_REG"
         public DateTime? fechA_MOD { get; set; }     // Coincide con "fechA_REG"
 
+        public string url { get; set; }       // Coincide con "url"
+
     }
 
     public class detalles
@@ -876,6 +917,8 @@ namespace RaduiUjedApp
         public int tiempo { get; set; }
         public DateTime hora { get; set; }
         public string categoriaRuta { get; set; }
+
+        public string url { get; set; }
 
     }
 

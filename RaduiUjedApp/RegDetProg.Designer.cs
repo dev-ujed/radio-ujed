@@ -44,6 +44,9 @@
             txtID = new TextBox();
             label4 = new Label();
             button6 = new Button();
+            txtRuta = new TextBox();
+            label6 = new Label();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDet).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
@@ -59,31 +62,32 @@
             dataGridViewDet.Size = new Size(798, 252);
             dataGridViewDet.TabIndex = 0;
             dataGridViewDet.CellClick += dataGridViewDet_CellClick;
+            dataGridViewDet.CellContentClick += dataGridViewDet_CellContentClick;
             dataGridViewDet.RowPrePaint += dataGridViewDet_RowPrePaint;
             // 
             // txtDescrip
             // 
             txtDescrip.Anchor = AnchorStyles.Top;
-            txtDescrip.Location = new Point(220, 82);
+            txtDescrip.Location = new Point(166, 68);
             txtDescrip.Multiline = true;
             txtDescrip.Name = "txtDescrip";
-            txtDescrip.Size = new Size(375, 59);
+            txtDescrip.Size = new Size(429, 59);
             txtDescrip.TabIndex = 1;
             // 
             // txtCategoria
             // 
             txtCategoria.Anchor = AnchorStyles.Top;
             txtCategoria.FormattingEnabled = true;
-            txtCategoria.Location = new Point(220, 147);
+            txtCategoria.Location = new Point(166, 135);
             txtCategoria.Name = "txtCategoria";
-            txtCategoria.Size = new Size(375, 23);
+            txtCategoria.Size = new Size(429, 23);
             txtCategoria.TabIndex = 2;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(145, 126);
+            label1.Location = new Point(91, 112);
             label1.Name = "label1";
             label1.Size = new Size(69, 15);
             label1.TabIndex = 5;
@@ -93,7 +97,7 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(156, 155);
+            label2.Location = new Point(102, 143);
             label2.Name = "label2";
             label2.Size = new Size(58, 15);
             label2.TabIndex = 6;
@@ -103,7 +107,7 @@
             // 
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(104, 184);
+            label3.Location = new Point(50, 198);
             label3.Name = "label3";
             label3.Size = new Size(110, 15);
             label3.TabIndex = 7;
@@ -146,7 +150,7 @@
             // 
             button4.Anchor = AnchorStyles.Top;
             button4.BackColor = Color.Orange;
-            button4.Location = new Point(601, 52);
+            button4.Location = new Point(601, 38);
             button4.Name = "button4";
             button4.Size = new Size(143, 23);
             button4.TabIndex = 12;
@@ -169,7 +173,7 @@
             // 
             lblHora.Anchor = AnchorStyles.Top;
             lblHora.AutoSize = true;
-            lblHora.Location = new Point(176, 209);
+            lblHora.Location = new Point(122, 226);
             lblHora.Name = "lblHora";
             lblHora.Size = new Size(38, 15);
             lblHora.TabIndex = 17;
@@ -178,25 +182,25 @@
             // numericUpDown1
             // 
             numericUpDown1.Anchor = AnchorStyles.Top;
-            numericUpDown1.Location = new Point(220, 176);
+            numericUpDown1.Location = new Point(166, 193);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(375, 23);
+            numericUpDown1.Size = new Size(429, 23);
             numericUpDown1.TabIndex = 18;
             // 
             // txtID
             // 
             txtID.Anchor = AnchorStyles.Top;
             txtID.Enabled = false;
-            txtID.Location = new Point(220, 53);
+            txtID.Location = new Point(166, 39);
             txtID.Name = "txtID";
-            txtID.Size = new Size(375, 23);
+            txtID.Size = new Size(429, 23);
             txtID.TabIndex = 19;
             // 
             // label4
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(196, 61);
+            label4.Location = new Point(142, 47);
             label4.Name = "label4";
             label4.Size = new Size(18, 15);
             label4.TabIndex = 20;
@@ -213,11 +217,43 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // txtRuta
+            // 
+            txtRuta.Anchor = AnchorStyles.Top;
+            txtRuta.Location = new Point(166, 164);
+            txtRuta.Name = "txtRuta";
+            txtRuta.Size = new Size(429, 23);
+            txtRuta.TabIndex = 22;
+            // 
+            // label6
+            // 
+            label6.Anchor = AnchorStyles.Top;
+            label6.AutoSize = true;
+            label6.Location = new Point(132, 172);
+            label6.Name = "label6";
+            label6.Size = new Size(28, 15);
+            label6.TabIndex = 6;
+            label6.Text = "URL";
+            label6.Click += label6_Click;
+            // 
+            // button5
+            // 
+            button5.Anchor = AnchorStyles.Top;
+            button5.Location = new Point(601, 135);
+            button5.Name = "button5";
+            button5.Size = new Size(75, 23);
+            button5.TabIndex = 23;
+            button5.Text = "Examinar...";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click_1;
+            // 
             // RegDetProg
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 533);
+            Controls.Add(button5);
+            Controls.Add(txtRuta);
             Controls.Add(button6);
             Controls.Add(label4);
             Controls.Add(txtID);
@@ -229,6 +265,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(label3);
+            Controls.Add(label6);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(txtCategoria);
@@ -262,5 +299,8 @@
         private TextBox txtID;
         private Label label4;
         private Button button6;
+        private TextBox txtRuta;
+        private Label label6;
+        private Button button5;
     }
 }
