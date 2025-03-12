@@ -23,6 +23,7 @@ namespace RaduiUjedApp
         private TimeSpan hora; // Se usa TimeSpan para manejar hora
         private readonly string apiUrl = "http://192.168.10.176/categorias";
         private List<detalles> programaciones; // Lista de programaciones
+        private List<Categoria> categorias; // Lista de categorías
         private TimeSpan ultimaHora;
         private int ultimaDuracion = 0;
 
@@ -121,7 +122,7 @@ namespace RaduiUjedApp
                     if (response.IsSuccessStatusCode)
                     {
                         string jsonResponse = await response.Content.ReadAsStringAsync();
-                        List<Categoria> categorias = JsonConvert.DeserializeObject<List<Categoria>>(jsonResponse);
+                        this.categorias = JsonConvert.DeserializeObject<List<Categoria>>(jsonResponse);
 
                         // Llenar el ComboBox con las categorías
                         txtCategoria.DataSource = categorias;
@@ -213,8 +214,35 @@ namespace RaduiUjedApp
                 dataGridViewDet.Columns["tiempo"].HeaderText = "Tiempo ' ";
             }
 
+            if (!dataGridViewDet.Columns.Contains("CategoriaDescripcion"))
+            {
+                DataGridViewTextBoxColumn categoriaCol = new DataGridViewTextBoxColumn
+                {
+                    Name = "CategoriaDescripcion",
+                    HeaderText = "Categoría",
+                    ReadOnly = true
+                };
+
+                dataGridViewDet.Columns.Add(categoriaCol);
+            }
+
+
+            foreach (DataGridViewRow row in dataGridViewDet.Rows)
+            {
+                if (row.Cells["tipO_ID"].Value != null)
+                {
+                    int id = Convert.ToInt32(row.Cells["tipO_ID"].Value);
+                    var categoria = this.categorias.FirstOrDefault(c => c.id == id);
+
+                    if (categoria != null)
+                    {
+                        row.Cells["CategoriaDescripcion"].Value = categoria.descripcion;
+                    }
+                }
+            }
+
             // 🔹 Ocultar columnas innecesarias si existen
-            string[] columnasOcultar = { "deT_ID", "reG_ID", "tipO_ID", "categoriaRuta" };
+            string[] columnasOcultar = { "deT_ID", "reG_ID", "categoriaRuta", "url", "tipO_ID" };
             foreach (string columna in columnasOcultar)
             {
                 if (dataGridViewDet.Columns.Contains(columna))
@@ -235,6 +263,10 @@ namespace RaduiUjedApp
                 }
             }
 
+            if (dataGridViewDet.Columns.Contains("CategoriaDescripcion"))
+            {
+                dataGridViewDet.Columns["CategoriaDescripcion"].DisplayIndex = dataGridViewDet.Columns.Count - 2;
+            }
             // 🔹 Mover la columna "Acciones" al final
             if (dataGridViewDet.Columns.Contains("btnUbicacion"))
             {
