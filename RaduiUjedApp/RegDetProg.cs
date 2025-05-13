@@ -23,7 +23,8 @@ namespace RaduiUjedApp
         private TimeSpan hora; // Se usa TimeSpan para manejar hora
         private readonly string apiUrl = "http://192.168.10.176/categorias";
         private List<detalles> programaciones; // Lista de programaciones
-        private List<Categoria> categorias; // Lista de categorías
+        private List<Categoria> categorias; // Lista 
+
         private TimeSpan ultimaHora;
         private int ultimaDuracion = 0;
 
@@ -128,6 +129,16 @@ namespace RaduiUjedApp
                         txtCategoria.DataSource = categorias;
                         txtCategoria.DisplayMember = "descripcion";
                         txtCategoria.ValueMember = "id";
+                        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+
+                        foreach (var categoria in this.categorias)
+                        {
+                            collection.Add(categoria.descripcion); // si descripcion es una propiedad pública
+                        }
+
+                        txtCategoria.AutoCompleteCustomSource = collection;
+                        txtCategoria.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        txtCategoria.AutoCompleteSource = AutoCompleteSource.CustomSource;
                     }
                     else
                     {
