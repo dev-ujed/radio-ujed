@@ -152,9 +152,9 @@ namespace RaduiUjedApp
 
         private async void RegDetProg_Load(object sender, EventArgs e)
         {
+            await CargarCategorias();
             // URL de la API
             string apiUrl = $"http://192.168.10.176/detalleprog/{idRegistro}";
-
             // Obtener los datos de la API
             List<detalles> progra = await ObtenerDetProgramacionDesdeAPI(apiUrl);
 

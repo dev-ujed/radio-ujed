@@ -20,6 +20,8 @@ namespace RaduiUjedApp
         public RegistrarCategoria()
         {
             InitializeComponent();
+            label4.Visible = false;
+            label4.Visible = false;
         }
         private static RegistrarCategoria instance;
         public static RegistrarCategoria GetInstance(Form contendorPadre)
@@ -77,6 +79,7 @@ namespace RaduiUjedApp
 
 
             // Ocultar la columna de usuario (opcional)
+            dataGridViewCategoria.Columns["id"].Visible = false;
             dataGridViewCategoria.Columns["usuariO_REG"].Visible = false;
             dataGridViewCategoria.Columns["usuariO_MOD"].Visible = false;
         }
