@@ -46,15 +46,16 @@
             // txtDesc
             // 
             txtDesc.Anchor = AnchorStyles.Top;
-            txtDesc.Location = new Point(187, 98);
+            txtDesc.Location = new Point(187, 69);
+            txtDesc.Multiline = true;
             txtDesc.Name = "txtDesc";
-            txtDesc.Size = new Size(453, 23);
+            txtDesc.Size = new Size(453, 77);
             txtDesc.TabIndex = 0;
             // 
             // txtRuta
             // 
             txtRuta.Anchor = AnchorStyles.Top;
-            txtRuta.Location = new Point(187, 127);
+            txtRuta.Location = new Point(187, 152);
             txtRuta.Name = "txtRuta";
             txtRuta.Size = new Size(453, 23);
             txtRuta.TabIndex = 1;
@@ -63,7 +64,7 @@
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(112, 106);
+            label1.Location = new Point(112, 131);
             label1.Name = "label1";
             label1.Size = new Size(69, 15);
             label1.TabIndex = 2;
@@ -73,7 +74,7 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(150, 135);
+            label2.Location = new Point(150, 160);
             label2.Name = "label2";
             label2.Size = new Size(31, 15);
             label2.TabIndex = 3;
@@ -84,7 +85,7 @@
             dataGridViewCategoria.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewCategoria.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCategoria.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCategoria.Location = new Point(50, 217);
+            dataGridViewCategoria.Location = new Point(52, 242);
             dataGridViewCategoria.Name = "dataGridViewCategoria";
             dataGridViewCategoria.RowTemplate.Height = 25;
             dataGridViewCategoria.Size = new Size(699, 150);
@@ -94,7 +95,7 @@
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(200, 175);
+            button1.Location = new Point(210, 193);
             button1.Name = "button1";
             button1.Size = new Size(124, 23);
             button1.TabIndex = 5;
@@ -105,7 +106,7 @@
             // button2
             // 
             button2.Anchor = AnchorStyles.Top;
-            button2.Location = new Point(330, 175);
+            button2.Location = new Point(340, 193);
             button2.Name = "button2";
             button2.Size = new Size(154, 23);
             button2.TabIndex = 6;
@@ -137,7 +138,7 @@
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(163, 77);
+            label4.Location = new Point(163, 80);
             label4.Name = "label4";
             label4.Size = new Size(18, 15);
             label4.TabIndex = 11;
@@ -146,7 +147,7 @@
             // button5
             // 
             button5.Anchor = AnchorStyles.Top;
-            button5.Location = new Point(490, 175);
+            button5.Location = new Point(500, 193);
             button5.Name = "button5";
             button5.Size = new Size(128, 23);
             button5.TabIndex = 12;
@@ -156,9 +157,9 @@
             // 
             // button3
             // 
-            button3.Location = new Point(646, 128);
+            button3.Location = new Point(646, 145);
             button3.Name = "button3";
-            button3.Size = new Size(75, 23);
+            button3.Size = new Size(75, 34);
             button3.TabIndex = 13;
             button3.Text = "Examinar...";
             button3.UseVisualStyleBackColor = true;
@@ -169,6 +170,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 427);
+            Controls.Add(txtDesc);
             Controls.Add(button3);
             Controls.Add(button5);
             Controls.Add(label4);
@@ -180,7 +182,6 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(txtRuta);
-            Controls.Add(txtDesc);
             Name = "RegistrarCategoria";
             Text = "RegistrarCategoria";
             Load += RegistrarCategoria_Load;
