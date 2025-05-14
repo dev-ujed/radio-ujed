@@ -62,6 +62,7 @@ namespace RaduiUjedApp
 
             // Ocultar la columna de contraseña (opcional)
             dataGridViewUsuarios.Columns["u_PASSWORD"].Visible = false;
+            dataGridViewUsuarios.Columns["iD_USUARIO"].Visible = false; 
         }
 
         private void CargarRoles()

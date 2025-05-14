@@ -56,19 +56,22 @@
             dataGridViewUsuarios.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(81, 319);
+            dataGridViewUsuarios.Location = new Point(98, 422);
+            dataGridViewUsuarios.Margin = new Padding(4);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.RowTemplate.Height = 25;
-            dataGridViewUsuarios.Size = new Size(707, 207);
+            dataGridViewUsuarios.Size = new Size(909, 290);
             dataGridViewUsuarios.TabIndex = 0;
             dataGridViewUsuarios.CellClick += dataGridViewUsuarios_CellClick;
             // 
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(212, 290);
+            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(259, 362);
+            button1.Margin = new Padding(4);
             button1.Name = "button1";
-            button1.Size = new Size(152, 23);
+            button1.Size = new Size(195, 32);
             button1.TabIndex = 1;
             button1.Text = "Registrar usuario";
             button1.UseVisualStyleBackColor = true;
@@ -79,7 +82,8 @@
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(389, 36);
+            label1.Location = new Point(500, 21);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
             label1.Size = new Size(89, 25);
             label1.TabIndex = 2;
@@ -89,67 +93,83 @@
             // 
             txtID.Anchor = AnchorStyles.Top;
             txtID.Enabled = false;
-            txtID.Location = new Point(270, 79);
+            txtID.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtID.Location = new Point(333, 67);
+            txtID.Margin = new Padding(4);
             txtID.Name = "txtID";
             txtID.ReadOnly = true;
-            txtID.Size = new Size(371, 23);
+            txtID.Size = new Size(476, 29);
             txtID.TabIndex = 3;
             // 
             // txtNombre
             // 
             txtNombre.Anchor = AnchorStyles.Top;
-            txtNombre.Location = new Point(270, 108);
+            txtNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtNombre.Location = new Point(333, 107);
+            txtNombre.Margin = new Padding(4);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(371, 23);
+            txtNombre.Size = new Size(476, 29);
             txtNombre.TabIndex = 4;
             // 
             // txtPaterno
             // 
             txtPaterno.Anchor = AnchorStyles.Top;
-            txtPaterno.Location = new Point(270, 137);
+            txtPaterno.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtPaterno.Location = new Point(333, 148);
+            txtPaterno.Margin = new Padding(4);
             txtPaterno.Name = "txtPaterno";
-            txtPaterno.Size = new Size(371, 23);
+            txtPaterno.Size = new Size(476, 29);
             txtPaterno.TabIndex = 5;
             // 
             // txtMaterno
             // 
             txtMaterno.Anchor = AnchorStyles.Top;
-            txtMaterno.Location = new Point(270, 166);
+            txtMaterno.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtMaterno.Location = new Point(333, 188);
+            txtMaterno.Margin = new Padding(4);
             txtMaterno.Name = "txtMaterno";
-            txtMaterno.Size = new Size(371, 23);
+            txtMaterno.Size = new Size(476, 29);
             txtMaterno.TabIndex = 6;
             // 
             // ComboRol
             // 
             ComboRol.Anchor = AnchorStyles.Top;
+            ComboRol.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ComboRol.FormattingEnabled = true;
-            ComboRol.Location = new Point(270, 195);
+            ComboRol.Location = new Point(333, 229);
+            ComboRol.Margin = new Padding(4);
             ComboRol.Name = "ComboRol";
-            ComboRol.Size = new Size(371, 23);
+            ComboRol.Size = new Size(476, 29);
             ComboRol.TabIndex = 7;
             // 
             // txtUsuario
             // 
             txtUsuario.Anchor = AnchorStyles.Top;
-            txtUsuario.Location = new Point(272, 223);
+            txtUsuario.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtUsuario.Location = new Point(336, 268);
+            txtUsuario.Margin = new Padding(4);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(369, 23);
+            txtUsuario.Size = new Size(473, 29);
             txtUsuario.TabIndex = 8;
             // 
             // txtPassword
             // 
             txtPassword.Anchor = AnchorStyles.Top;
-            txtPassword.Location = new Point(271, 251);
+            txtPassword.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtPassword.Location = new Point(334, 307);
+            txtPassword.Margin = new Padding(4);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(370, 23);
+            txtPassword.Size = new Size(475, 29);
             txtPassword.TabIndex = 9;
             // 
             // button2
             // 
             button2.Anchor = AnchorStyles.Top;
-            button2.Location = new Point(379, 290);
+            button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Location = new Point(473, 362);
+            button2.Margin = new Padding(4);
             button2.Name = "button2";
-            button2.Size = new Size(159, 23);
+            button2.Size = new Size(204, 32);
             button2.TabIndex = 10;
             button2.Text = "Actualizar usuario";
             button2.UseVisualStyleBackColor = true;
@@ -159,9 +179,11 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(237, 82);
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(291, 71);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(21, 15);
+            label2.Size = new Size(28, 21);
             label2.TabIndex = 13;
             label2.Text = "ID:";
             label2.Click += label2_Click;
@@ -170,9 +192,11 @@
             // 
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(206, 116);
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(251, 118);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(54, 15);
+            label3.Size = new Size(71, 21);
             label3.TabIndex = 14;
             label3.Text = "Nombre:";
             // 
@@ -180,9 +204,11 @@
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(209, 145);
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label4.Location = new Point(255, 159);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(51, 15);
+            label4.Size = new Size(66, 21);
             label4.TabIndex = 15;
             label4.Text = "Paterno:";
             // 
@@ -190,9 +216,11 @@
             // 
             label5.Anchor = AnchorStyles.Top;
             label5.AutoSize = true;
-            label5.Location = new Point(209, 174);
+            label5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label5.Location = new Point(255, 200);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(55, 15);
+            label5.Size = new Size(72, 21);
             label5.TabIndex = 16;
             label5.Text = "Materno:";
             // 
@@ -200,9 +228,11 @@
             // 
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Location = new Point(237, 203);
+            label6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label6.Location = new Point(291, 240);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(27, 15);
+            label6.Size = new Size(36, 21);
             label6.TabIndex = 17;
             label6.Text = "Rol:";
             // 
@@ -210,9 +240,11 @@
             // 
             label7.Anchor = AnchorStyles.Top;
             label7.AutoSize = true;
-            label7.Location = new Point(214, 231);
+            label7.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label7.Location = new Point(261, 279);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(50, 15);
+            label7.Size = new Size(67, 21);
             label7.TabIndex = 18;
             label7.Text = "Usuario:";
             // 
@@ -220,18 +252,22 @@
             // 
             label8.Anchor = AnchorStyles.Top;
             label8.AutoSize = true;
-            label8.Location = new Point(195, 259);
+            label8.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label8.Location = new Point(237, 319);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
-            label8.Size = new Size(70, 15);
+            label8.Size = new Size(92, 21);
             label8.TabIndex = 19;
             label8.Text = "Contraseña:";
             // 
             // button5
             // 
             button5.Anchor = AnchorStyles.Top;
-            button5.Location = new Point(554, 290);
+            button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button5.Location = new Point(698, 362);
+            button5.Margin = new Padding(4);
             button5.Name = "button5";
-            button5.Size = new Size(126, 23);
+            button5.Size = new Size(162, 32);
             button5.TabIndex = 20;
             button5.Text = "Limpiar formulario";
             button5.UseVisualStyleBackColor = true;
@@ -239,9 +275,9 @@
             // 
             // registroUsuario
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(894, 540);
+            ClientSize = new Size(1149, 756);
             Controls.Add(button5);
             Controls.Add(label8);
             Controls.Add(label7);
@@ -261,6 +297,8 @@
             Controls.Add(label1);
             Controls.Add(button1);
             Controls.Add(dataGridViewUsuarios);
+            Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Margin = new Padding(4);
             Name = "registroUsuario";
             Text = "registroUsuario";
             Load += registroUsuario_Load;
