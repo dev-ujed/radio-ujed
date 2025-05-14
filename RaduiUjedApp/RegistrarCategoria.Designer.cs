@@ -46,27 +46,33 @@
             // txtDesc
             // 
             txtDesc.Anchor = AnchorStyles.Top;
-            txtDesc.Location = new Point(187, 69);
+            txtDesc.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtDesc.Location = new Point(240, 63);
+            txtDesc.Margin = new Padding(4);
             txtDesc.Multiline = true;
             txtDesc.Name = "txtDesc";
-            txtDesc.Size = new Size(453, 77);
+            txtDesc.Size = new Size(581, 140);
             txtDesc.TabIndex = 0;
             // 
             // txtRuta
             // 
             txtRuta.Anchor = AnchorStyles.Top;
-            txtRuta.Location = new Point(187, 152);
+            txtRuta.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtRuta.Location = new Point(240, 213);
+            txtRuta.Margin = new Padding(4);
             txtRuta.Name = "txtRuta";
-            txtRuta.Size = new Size(453, 23);
+            txtRuta.Size = new Size(581, 29);
             txtRuta.TabIndex = 1;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(112, 131);
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(144, 183);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(69, 15);
+            label1.Size = new Size(91, 21);
             label1.TabIndex = 2;
             label1.Text = "Descripción";
             // 
@@ -74,9 +80,11 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(150, 160);
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(193, 224);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(31, 15);
+            label2.Size = new Size(42, 21);
             label2.TabIndex = 3;
             label2.Text = "Ruta";
             // 
@@ -85,19 +93,22 @@
             dataGridViewCategoria.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewCategoria.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCategoria.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCategoria.Location = new Point(52, 242);
+            dataGridViewCategoria.Location = new Point(67, 339);
+            dataGridViewCategoria.Margin = new Padding(4);
             dataGridViewCategoria.Name = "dataGridViewCategoria";
             dataGridViewCategoria.RowTemplate.Height = 25;
-            dataGridViewCategoria.Size = new Size(699, 150);
+            dataGridViewCategoria.Size = new Size(899, 210);
             dataGridViewCategoria.TabIndex = 4;
             dataGridViewCategoria.CellClick += dataGridViewCategoria_CellClick;
             // 
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(210, 193);
+            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(270, 270);
+            button1.Margin = new Padding(4);
             button1.Name = "button1";
-            button1.Size = new Size(124, 23);
+            button1.Size = new Size(159, 32);
             button1.TabIndex = 5;
             button1.Text = "Registrar categoría";
             button1.UseVisualStyleBackColor = true;
@@ -106,9 +117,11 @@
             // button2
             // 
             button2.Anchor = AnchorStyles.Top;
-            button2.Location = new Point(340, 193);
+            button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Location = new Point(437, 270);
+            button2.Margin = new Padding(4);
             button2.Name = "button2";
-            button2.Size = new Size(154, 23);
+            button2.Size = new Size(198, 32);
             button2.TabIndex = 6;
             button2.Text = "Actualizar categoría";
             button2.UseVisualStyleBackColor = true;
@@ -119,7 +132,8 @@
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(327, 25);
+            label3.Location = new Point(449, 29);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(106, 25);
             label3.TabIndex = 9;
@@ -129,27 +143,31 @@
             // 
             txtID.Anchor = AnchorStyles.Top;
             txtID.Enabled = false;
-            txtID.Location = new Point(187, 69);
+            txtID.Location = new Point(240, 97);
+            txtID.Margin = new Padding(4);
             txtID.Name = "txtID";
-            txtID.Size = new Size(453, 23);
+            txtID.Size = new Size(581, 29);
             txtID.TabIndex = 10;
             // 
             // label4
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(163, 80);
+            label4.Location = new Point(210, 112);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(18, 15);
+            label4.Size = new Size(25, 21);
             label4.TabIndex = 11;
             label4.Text = "ID";
             // 
             // button5
             // 
             button5.Anchor = AnchorStyles.Top;
-            button5.Location = new Point(500, 193);
+            button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button5.Location = new Point(643, 270);
+            button5.Margin = new Padding(4);
             button5.Name = "button5";
-            button5.Size = new Size(128, 23);
+            button5.Size = new Size(165, 32);
             button5.TabIndex = 12;
             button5.Text = "Limpiar formulario";
             button5.UseVisualStyleBackColor = true;
@@ -157,9 +175,12 @@
             // 
             // button3
             // 
-            button3.Location = new Point(646, 145);
+            button3.Anchor = AnchorStyles.Top;
+            button3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button3.Location = new Point(831, 203);
+            button3.Margin = new Padding(4);
             button3.Name = "button3";
-            button3.Size = new Size(75, 34);
+            button3.Size = new Size(96, 48);
             button3.TabIndex = 13;
             button3.Text = "Examinar...";
             button3.UseVisualStyleBackColor = true;
@@ -167,9 +188,9 @@
             // 
             // RegistrarCategoria
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(9F, 21F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 427);
+            ClientSize = new Size(1029, 598);
             Controls.Add(txtDesc);
             Controls.Add(button3);
             Controls.Add(button5);
@@ -182,6 +203,8 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(txtRuta);
+            Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            Margin = new Padding(4);
             Name = "RegistrarCategoria";
             Text = "RegistrarCategoria";
             Load += RegistrarCategoria_Load;
