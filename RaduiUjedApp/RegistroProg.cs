@@ -19,6 +19,8 @@ namespace RaduiUjedApp
         public RegistroProg()
         {
             InitializeComponent();
+            label6.Visible = false;
+            txtID.Visible = false;
         }
         private static RegistroProg instance;
         public static RegistroProg GetInstance(Form contendorPadre)
@@ -71,6 +73,8 @@ namespace RaduiUjedApp
 
         private void ConfigurarDataGridView()
         {
+            dataGridViewProgramacion.DefaultCellStyle.Font = new Font("Segoe UI", 12);
+            dataGridViewProgramacion.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12);
             dataGridViewProgramacion.ReadOnly = true; // Hace todo el DataGridView de solo lectura
 
             // Crear la columna de botones
@@ -97,6 +101,7 @@ namespace RaduiUjedApp
 
             // Ocultar la columna de usuario (opcional)
             dataGridViewProgramacion.Columns["u_USUARIO"].Visible = false;
+            dataGridViewProgramacion.Columns["u_ID"].Visible = false;
             // Agregar la columna de botón al DataGridView
             dataGridViewProgramacion.Columns.Add(btnCol);
 
@@ -104,6 +109,11 @@ namespace RaduiUjedApp
             foreach (DataGridViewColumn col in dataGridViewProgramacion.Columns)
             {
                 col.ReadOnly = !(col is DataGridViewButtonColumn);
+            }
+
+            foreach (DataGridViewRow row in dataGridViewProgramacion.Rows)
+            {
+                row.Height = 32; // Ajusta el valor según lo necesites
             }
 
             //// Suscribir el evento de clic

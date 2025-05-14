@@ -39,10 +39,11 @@
             // txtProg
             // 
             txtProg.Anchor = AnchorStyles.Top;
+            txtProg.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtProg.FormattingEnabled = true;
             txtProg.Location = new Point(172, 96);
             txtProg.Name = "txtProg";
-            txtProg.Size = new Size(451, 23);
+            txtProg.Size = new Size(451, 29);
             txtProg.TabIndex = 0;
             txtProg.SelectedIndexChanged += txtProg_SelectedIndexChanged;
             // 

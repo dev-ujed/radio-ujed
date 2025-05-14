@@ -50,7 +50,8 @@
             // txtDesc
             // 
             txtDesc.Anchor = AnchorStyles.Top;
-            txtDesc.Location = new Point(257, 168);
+            txtDesc.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtDesc.Location = new Point(278, 140);
             txtDesc.Multiline = true;
             txtDesc.Name = "txtDesc";
             txtDesc.Size = new Size(342, 58);
@@ -59,7 +60,8 @@
             // txtObserv
             // 
             txtObserv.Anchor = AnchorStyles.Top;
-            txtObserv.Location = new Point(257, 232);
+            txtObserv.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtObserv.Location = new Point(278, 204);
             txtObserv.Multiline = true;
             txtObserv.Name = "txtObserv";
             txtObserv.Size = new Size(342, 67);
@@ -68,18 +70,20 @@
             // txtFecha
             // 
             txtFecha.Anchor = AnchorStyles.Top;
-            txtFecha.Location = new Point(257, 110);
+            txtFecha.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtFecha.Location = new Point(277, 70);
             txtFecha.Name = "txtFecha";
-            txtFecha.Size = new Size(342, 23);
+            txtFecha.Size = new Size(342, 29);
             txtFecha.TabIndex = 3;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(183, 171);
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(180, 182);
             label1.Name = "label1";
-            label1.Size = new Size(69, 15);
+            label1.Size = new Size(91, 21);
             label1.TabIndex = 4;
             label1.Text = "Descripción";
             // 
@@ -87,9 +91,10 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(168, 235);
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(159, 250);
             label2.Name = "label2";
-            label2.Size = new Size(84, 15);
+            label2.Size = new Size(112, 21);
             label2.TabIndex = 5;
             label2.Text = "Observaciones";
             // 
@@ -97,9 +102,10 @@
             // 
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(171, 139);
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(165, 111);
             label3.Name = "label3";
-            label3.Size = new Size(81, 15);
+            label3.Size = new Size(106, 21);
             label3.TabIndex = 6;
             label3.Text = "Hora de inicio";
             // 
@@ -107,9 +113,10 @@
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(211, 110);
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label4.Location = new Point(221, 76);
             label4.Name = "label4";
-            label4.Size = new Size(38, 15);
+            label4.Size = new Size(50, 21);
             label4.TabIndex = 7;
             label4.Text = "Fecha";
             // 
@@ -129,10 +136,10 @@
             dataGridViewProgramacion.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewProgramacion.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewProgramacion.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewProgramacion.Location = new Point(-9, 356);
+            dataGridViewProgramacion.Location = new Point(-9, 348);
             dataGridViewProgramacion.Name = "dataGridViewProgramacion";
             dataGridViewProgramacion.RowTemplate.Height = 25;
-            dataGridViewProgramacion.Size = new Size(810, 255);
+            dataGridViewProgramacion.Size = new Size(810, 263);
             dataGridViewProgramacion.TabIndex = 9;
             dataGridViewProgramacion.CellClick += dataGridViewProgramacion_CellClick;
             // 
@@ -140,10 +147,11 @@
             // 
             button1.Anchor = AnchorStyles.Top;
             button1.BackColor = SystemColors.Control;
+            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             button1.ForeColor = SystemColors.ActiveCaptionText;
-            button1.Location = new Point(168, 311);
+            button1.Location = new Point(133, 297);
             button1.Name = "button1";
-            button1.Size = new Size(109, 23);
+            button1.Size = new Size(138, 32);
             button1.TabIndex = 10;
             button1.Text = "Registrar carta";
             button1.UseVisualStyleBackColor = false;
@@ -153,10 +161,11 @@
             // 
             button2.Anchor = AnchorStyles.Top;
             button2.BackColor = SystemColors.Control;
+            button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             button2.ForeColor = SystemColors.ActiveCaptionText;
-            button2.Location = new Point(283, 311);
+            button2.Location = new Point(277, 297);
             button2.Name = "button2";
-            button2.Size = new Size(125, 23);
+            button2.Size = new Size(125, 32);
             button2.TabIndex = 11;
             button2.Text = "Actualizar carta";
             button2.UseVisualStyleBackColor = false;
@@ -166,16 +175,16 @@
             // 
             txtID.Anchor = AnchorStyles.Top;
             txtID.Enabled = false;
-            txtID.Location = new Point(257, 77);
+            txtID.Location = new Point(59, 70);
             txtID.Name = "txtID";
-            txtID.Size = new Size(342, 23);
+            txtID.Size = new Size(64, 23);
             txtID.TabIndex = 14;
             // 
             // label6
             // 
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Location = new Point(233, 80);
+            label6.Location = new Point(35, 73);
             label6.Name = "label6";
             label6.Size = new Size(18, 15);
             label6.TabIndex = 15;
@@ -185,10 +194,11 @@
             // 
             button5.Anchor = AnchorStyles.Top;
             button5.BackColor = SystemColors.Control;
+            button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             button5.ForeColor = SystemColors.ActiveCaptionText;
-            button5.Location = new Point(414, 311);
+            button5.Location = new Point(408, 297);
             button5.Name = "button5";
-            button5.Size = new Size(116, 23);
+            button5.Size = new Size(116, 32);
             button5.TabIndex = 16;
             button5.Text = "Eliminar carta";
             button5.UseVisualStyleBackColor = false;
@@ -197,18 +207,20 @@
             // txtHora
             // 
             txtHora.Anchor = AnchorStyles.Top;
-            txtHora.Location = new Point(257, 139);
+            txtHora.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtHora.Location = new Point(277, 105);
             txtHora.Name = "txtHora";
-            txtHora.Size = new Size(342, 23);
+            txtHora.Size = new Size(342, 29);
             txtHora.TabIndex = 17;
             // 
             // button6
             // 
             button6.Anchor = AnchorStyles.Top;
             button6.BackColor = Color.FromArgb(233, 236, 239);
-            button6.Location = new Point(533, 311);
+            button6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button6.Location = new Point(527, 297);
             button6.Name = "button6";
-            button6.Size = new Size(130, 23);
+            button6.Size = new Size(150, 32);
             button6.TabIndex = 18;
             button6.Text = "Limpiar formulario";
             button6.UseVisualStyleBackColor = false;

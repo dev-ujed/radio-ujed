@@ -134,6 +134,8 @@ namespace RaduiUjedApp
 
         private void ConfigurarDataGridView()
         {
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12);
+            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 12);
 
             // Configurar DataGridView en modo de solo lectura
             dataGridView1.ReadOnly = true;
