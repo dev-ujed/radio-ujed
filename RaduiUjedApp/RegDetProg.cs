@@ -599,94 +599,62 @@ namespace RaduiUjedApp
                 return;
             }
 
-            // Si el tiempo es diferente, actualizar
-            if (programaOriginal.tiempo != nuevoTiempo)
+            // Actualizar siempre sin revisar si el tiempo se modificó
+            var programacionesDespues = programaciones.Where(p => p.hora > programaOriginal.hora).ToList();
+
+            string fechaHoraString = nuevafecha; // La fecha recibida al construir el formulario
+
+            // Reemplazar "p. m." y "a. m." por "PM" y "AM"
+            fechaHoraString = fechaHoraString.Replace(" p. m.", " PM").Replace(" a. m.", " AM");
+
+            // Intentar convertir la fechaHoraString a DateTime en formato de 24 horas
+            DateTime fechaHoraOriginal;
+
+            if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
             {
-                // Verificar si hay elementos después para actualizar
-                var programacionesDespues = programaciones.Where(p => p.hora > programaOriginal.hora).ToList();
-
-                string fechaHoraString = nuevafecha; // La fecha recibida al construir el formulario
-
-                // Reemplazar "p. m." y "a. m." por "PM" y "AM"
-                fechaHoraString = fechaHoraString.Replace(" p. m.", " PM").Replace(" a. m.", " AM");
-
-                // Intentar convertir la fechaHoraString a DateTime en formato de 24 horas
-                DateTime fechaHoraOriginal;
-
-                if (DateTime.TryParseExact(fechaHoraString, "dd/MM/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture, DateTimeStyles.None, out fechaHoraOriginal))
-                {
-                    DetProgra detProg = new DetProgra
-                    {
-                        deT_ID = detalleSeleccionado.deT_ID,
-                        reG_ID = detalleSeleccionado.reG_ID,
-                        u_DET_DES = nuevaDescripción,
-                        tipO_ID = detalleSeleccionado.tipO_ID,
-                        tiempo = nuevoTiempo,
-                        hora = detalleSeleccionado.hora,
-                        usuariO_MOD = SesionUsuario.Usuario,
-                        fechA_MOD = DateTime.Now,
-                        url = nuevaRuta
-                    };
-
-                    // Enviar los datos actualizados a la API
-                    bool resultado = await ActualizarDetEnAPI(detProg);
-
-                    if (resultado)
-                    {
-                        TimeSpan horaFinalPrograma = detalleSeleccionado.hora.TimeOfDay.Add(TimeSpan.FromMinutes(nuevoTiempo));
-
-                        for (int i = 0; i < programacionesDespues.Count; i++)
-                        {
-                            if (i == 0)
-                            {
-                                await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
-                            }
-                            else
-                            {
-                                horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
-                                await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
-                            }
-                        }
-
-                        // Actualizar el formulario
-                        await ActualizarFormulario();
-
-                        var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
-                        this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
-                        this.ultimaDuracion = ultimoPrograma.tiempo;
-                        lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
-
-                        MessageBox.Show("Programa actualizado correctamente.");
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al actualizar el registro.");
-                    }
-                }
-            }
-            else
-            {
-                // Si el tiempo no ha cambiado, solo actualizar la descripción
                 DetProgra detProg = new DetProgra
                 {
                     deT_ID = detalleSeleccionado.deT_ID,
                     reG_ID = detalleSeleccionado.reG_ID,
                     u_DET_DES = nuevaDescripción,
                     tipO_ID = detalleSeleccionado.tipO_ID,
-                    tiempo = detalleSeleccionado.tiempo,
+                    tiempo = nuevoTiempo,
                     hora = detalleSeleccionado.hora,
                     usuariO_MOD = SesionUsuario.Usuario,
                     fechA_MOD = DateTime.Now,
                     url = nuevaRuta
                 };
+
                 // Enviar los datos actualizados a la API
                 bool resultado = await ActualizarDetEnAPI(detProg);
 
                 if (resultado)
                 {
-                    MessageBox.Show("Programa actualizado correctamente.");
+                    TimeSpan horaFinalPrograma = detalleSeleccionado.hora.TimeOfDay.Add(TimeSpan.FromMinutes(nuevoTiempo));
+
+                    for (int i = 0; i < programacionesDespues.Count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                        }
+                        else
+                        {
+                            horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
+                            await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                        }
+                    }
+
+                    // Actualizar el formulario
                     await ActualizarFormulario();
+
+                    var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+                    this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
+                    this.ultimaDuracion = ultimoPrograma.tiempo;
+                    lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
+
+                    MessageBox.Show("Programa actualizado correctamente.");
+
                 }
                 else
                 {
@@ -748,58 +716,69 @@ namespace RaduiUjedApp
 
         private async void button3_Click(object sender, EventArgs e)
         {
-            if (detalleSeleccionado != null || txtID.Text != "")
+            if (detalleSeleccionado == null || string.IsNullOrWhiteSpace(txtID.Text))
             {
-                var programacionesDespues = programaciones.Where(p => p.hora > detalleSeleccionado.hora).ToList();
-                var programaAnterior = programaciones.FirstOrDefault(p => p.hora < detalleSeleccionado.hora);
+                MessageBox.Show("Selecciona un programa para eliminar.");
+                return;
+            }
 
-                bool resultado = await EliminarDetProgramacionEnAPI(detalleSeleccionado.deT_ID);
+            // Buscar el programa anterior 
+            var programaAnterior = programaciones
+                .Where(p => p.hora < detalleSeleccionado.hora)
+                .OrderByDescending(p => p.hora)
+                .FirstOrDefault();
 
-                if (resultado)
+            // Buscar si hay programas después ordenados por hora
+            var programacionesDespues = programaciones
+                .Where(p => p.hora > detalleSeleccionado.hora)
+                .OrderBy(p => p.hora)
+                .ToList();
+
+            //se intenta eliminar el programa seleccionado
+            bool resultado = await EliminarDetProgramacionEnAPI(detalleSeleccionado.deT_ID);
+
+            //si se eliminó correctamente:
+            if (resultado)
+            {
+                //remover prorgrama eliminardo de la lista local
+                programaciones.Remove(detalleSeleccionado);
+
+                TimeSpan horaFinalPrograma = this.hora;
+                //si hay programa anterior se usa este como hora final
+                if (programaAnterior != null)
                 {
-                    TimeSpan horaFinalPrograma = this.hora;
+                    horaFinalPrograma = programaAnterior.hora.TimeOfDay.Add(TimeSpan.FromMinutes(programaAnterior.tiempo));
+                }
 
-                    if (programaAnterior != null)
-                        horaFinalPrograma = programaAnterior.hora.TimeOfDay.Add(TimeSpan.FromMinutes(programaAnterior.tiempo));
+                // Reajustar horas de los programas siguientes
+                for (int i = 0; i < programacionesDespues.Count; i++)
+                {
+                    if (i > 0)
+                        horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
 
-                    for (int i = 0; i < programacionesDespues.Count; i++)
-                    {
-                        if (i == 0)
-                        {
-                            await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
-                        }
-                        else
-                        {
-                            horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
-                            await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
-                        }
-                    }
+                    await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
+                }
 
-                    await ActualizarFormulario();
-                    MessageBox.Show("Programación eliminada correctamente.");
-                    var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
+                await ActualizarFormulario();
+                MessageBox.Show("Programación eliminada correctamente.");
+                var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
 
-                    if (ultimoPrograma != null)
-                    {
-                        this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
-                        this.ultimaDuracion = ultimoPrograma.tiempo;
-                        lblHora.Text = $"Hora: {this.ultimaHora:hh\\:mm\\:ss}";
-                    }
-                    else
-                    {
-                        this.ultimaHora = TimeSpan.Zero;
-                        this.ultimaDuracion = 0;
-                        lblHora.Text = $"Hora: {this.hora:hh\\:mm\\:ss}";
-                    }
+                if (ultimoPrograma != null)
+                {
+                    this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
+                    this.ultimaDuracion = ultimoPrograma.tiempo;
+                    lblHora.Text = $"Hora: {this.ultimaHora:hh\\:mm\\:ss}";
                 }
                 else
                 {
-                    MessageBox.Show("Error al eliminar  programación.");
+                    this.ultimaHora = TimeSpan.Zero;
+                    this.ultimaDuracion = 0;
+                    lblHora.Text = $"Hora: {this.hora:hh\\:mm\\:ss}";
                 }
             }
             else
             {
-                MessageBox.Show("Selecciona un programa para actualizar.");
+                MessageBox.Show("Error al eliminar  programación. Por favor intente más tarde.");
             }
         }
 
