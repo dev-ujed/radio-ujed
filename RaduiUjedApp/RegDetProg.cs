@@ -37,6 +37,8 @@ namespace RaduiUjedApp
             InitializeComponent();
             idRegistro = id;
             nuevafecha = horaRecibida;
+            txtID.Visible = false;
+            label4.Visible = false;
 
             try
             {
@@ -179,6 +181,10 @@ namespace RaduiUjedApp
 
         private void ConfigurarDataGridView()
         {
+            dataGridViewDet.DefaultCellStyle.Font = new Font("Segoe UI", 12);
+            dataGridViewDet.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12);
+
+
             // 🔹 Si no hay columnas, agregarlas manualmente para evitar errores
             if (dataGridViewDet.Columns.Count == 0)
             {

@@ -52,11 +52,11 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Arial Black", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             label2.ForeColor = SystemColors.ButtonFace;
-            label2.Location = new Point(19, 11);
+            label2.Location = new Point(12, 9);
             label2.Name = "label2";
-            label2.Size = new Size(298, 27);
+            label2.Size = new Size(288, 30);
             label2.TabIndex = 0;
             label2.Text = "RADIO UNIVERSIDAD 100.5";
             // 
@@ -79,7 +79,7 @@
             lb1.BackColor = Color.FromArgb(186, 0, 0);
             lb1.BorderStyle = BorderStyle.FixedSingle;
             lb1.Dock = DockStyle.Top;
-            lb1.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lb1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lb1.ForeColor = Color.WhiteSmoke;
             lb1.Location = new Point(0, 132);
             lb1.Name = "lb1";
@@ -94,7 +94,7 @@
             lb2.BackColor = Color.FromArgb(186, 0, 0);
             lb2.BorderStyle = BorderStyle.FixedSingle;
             lb2.Dock = DockStyle.Top;
-            lb2.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lb2.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lb2.ForeColor = Color.WhiteSmoke;
             lb2.Location = new Point(0, 88);
             lb2.Name = "lb2";
@@ -109,7 +109,7 @@
             label3.BackColor = Color.FromArgb(186, 0, 0);
             label3.BorderStyle = BorderStyle.FixedSingle;
             label3.Dock = DockStyle.Top;
-            label3.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
             label3.ForeColor = Color.WhiteSmoke;
             label3.Location = new Point(0, 44);
             label3.Name = "label3";
@@ -124,7 +124,7 @@
             lb3.BackColor = Color.FromArgb(186, 0, 0);
             lb3.BorderStyle = BorderStyle.FixedSingle;
             lb3.Dock = DockStyle.Top;
-            lb3.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lb3.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lb3.ForeColor = Color.WhiteSmoke;
             lb3.Location = new Point(0, 0);
             lb3.Name = "lb3";

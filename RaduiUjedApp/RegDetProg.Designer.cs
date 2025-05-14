@@ -56,10 +56,10 @@
             dataGridViewDet.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewDet.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewDet.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewDet.Location = new Point(0, 284);
+            dataGridViewDet.Location = new Point(0, 309);
             dataGridViewDet.Name = "dataGridViewDet";
             dataGridViewDet.RowTemplate.Height = 25;
-            dataGridViewDet.Size = new Size(798, 252);
+            dataGridViewDet.Size = new Size(798, 227);
             dataGridViewDet.TabIndex = 0;
             dataGridViewDet.CellClick += dataGridViewDet_CellClick;
             dataGridViewDet.CellContentClick += dataGridViewDet_CellContentClick;
@@ -68,7 +68,8 @@
             // txtDescrip
             // 
             txtDescrip.Anchor = AnchorStyles.Top;
-            txtDescrip.Location = new Point(166, 68);
+            txtDescrip.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtDescrip.Location = new Point(182, 38);
             txtDescrip.Multiline = true;
             txtDescrip.Name = "txtDescrip";
             txtDescrip.Size = new Size(429, 59);
@@ -77,19 +78,21 @@
             // txtCategoria
             // 
             txtCategoria.Anchor = AnchorStyles.Top;
+            txtCategoria.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtCategoria.FormattingEnabled = true;
-            txtCategoria.Location = new Point(166, 135);
+            txtCategoria.Location = new Point(182, 103);
             txtCategoria.Name = "txtCategoria";
-            txtCategoria.Size = new Size(429, 23);
+            txtCategoria.Size = new Size(429, 29);
             txtCategoria.TabIndex = 2;
             // 
             // label1
             // 
             label1.Anchor = AnchorStyles.Top;
             label1.AutoSize = true;
-            label1.Location = new Point(91, 112);
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(85, 76);
             label1.Name = "label1";
-            label1.Size = new Size(69, 15);
+            label1.Size = new Size(91, 21);
             label1.TabIndex = 5;
             label1.Text = "Descripción";
             // 
@@ -97,9 +100,10 @@
             // 
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
-            label2.Location = new Point(102, 143);
+            label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Location = new Point(99, 111);
             label2.Name = "label2";
-            label2.Size = new Size(58, 15);
+            label2.Size = new Size(77, 21);
             label2.TabIndex = 6;
             label2.Text = "Categoría";
             // 
@@ -107,18 +111,20 @@
             // 
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
-            label3.Location = new Point(50, 198);
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label3.Location = new Point(32, 175);
             label3.Name = "label3";
-            label3.Size = new Size(110, 15);
+            label3.Size = new Size(144, 21);
             label3.TabIndex = 7;
             label3.Text = "Duración (minutos)";
             // 
             // button1
             // 
             button1.Anchor = AnchorStyles.Top;
-            button1.Location = new Point(142, 243);
+            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(117, 259);
             button1.Name = "button1";
-            button1.Size = new Size(141, 23);
+            button1.Size = new Size(141, 32);
             button1.TabIndex = 9;
             button1.Text = "Registrar programa";
             button1.UseVisualStyleBackColor = true;
@@ -127,9 +133,10 @@
             // button2
             // 
             button2.Anchor = AnchorStyles.Top;
-            button2.Location = new Point(289, 243);
+            button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Location = new Point(264, 259);
             button2.Name = "button2";
-            button2.Size = new Size(137, 23);
+            button2.Size = new Size(137, 32);
             button2.TabIndex = 10;
             button2.Text = "Actualizar programa";
             button2.UseVisualStyleBackColor = true;
@@ -138,9 +145,10 @@
             // button3
             // 
             button3.Anchor = AnchorStyles.Top;
-            button3.Location = new Point(437, 243);
+            button3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button3.Location = new Point(412, 259);
             button3.Name = "button3";
-            button3.Size = new Size(120, 23);
+            button3.Size = new Size(120, 32);
             button3.TabIndex = 11;
             button3.Text = "Eliminar programa";
             button3.UseVisualStyleBackColor = true;
@@ -150,9 +158,10 @@
             // 
             button4.Anchor = AnchorStyles.Top;
             button4.BackColor = Color.Orange;
-            button4.Location = new Point(601, 38);
+            button4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button4.Location = new Point(630, 38);
             button4.Name = "button4";
-            button4.Size = new Size(143, 23);
+            button4.Size = new Size(151, 36);
             button4.TabIndex = 12;
             button4.Text = "Volver a cartas";
             button4.UseVisualStyleBackColor = false;
@@ -173,34 +182,36 @@
             // 
             lblHora.Anchor = AnchorStyles.Top;
             lblHora.AutoSize = true;
-            lblHora.Location = new Point(122, 226);
+            lblHora.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblHora.Location = new Point(124, 215);
             lblHora.Name = "lblHora";
-            lblHora.Size = new Size(38, 15);
+            lblHora.Size = new Size(52, 21);
             lblHora.TabIndex = 17;
             lblHora.Text = "label6";
             // 
             // numericUpDown1
             // 
             numericUpDown1.Anchor = AnchorStyles.Top;
-            numericUpDown1.Location = new Point(166, 193);
+            numericUpDown1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            numericUpDown1.Location = new Point(182, 173);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(429, 23);
+            numericUpDown1.Size = new Size(429, 29);
             numericUpDown1.TabIndex = 18;
             // 
             // txtID
             // 
             txtID.Anchor = AnchorStyles.Top;
             txtID.Enabled = false;
-            txtID.Location = new Point(166, 39);
+            txtID.Location = new Point(50, 38);
             txtID.Name = "txtID";
-            txtID.Size = new Size(429, 23);
+            txtID.Size = new Size(50, 23);
             txtID.TabIndex = 19;
             // 
             // label4
             // 
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
-            label4.Location = new Point(142, 47);
+            label4.Location = new Point(26, 46);
             label4.Name = "label4";
             label4.Size = new Size(18, 15);
             label4.TabIndex = 20;
@@ -209,9 +220,10 @@
             // button6
             // 
             button6.Anchor = AnchorStyles.Top;
-            button6.Location = new Point(564, 243);
+            button6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button6.Location = new Point(539, 259);
             button6.Name = "button6";
-            button6.Size = new Size(125, 23);
+            button6.Size = new Size(153, 32);
             button6.TabIndex = 21;
             button6.Text = "Limpiar formulario";
             button6.UseVisualStyleBackColor = true;
@@ -220,18 +232,20 @@
             // txtRuta
             // 
             txtRuta.Anchor = AnchorStyles.Top;
-            txtRuta.Location = new Point(166, 164);
+            txtRuta.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtRuta.Location = new Point(182, 138);
             txtRuta.Name = "txtRuta";
-            txtRuta.Size = new Size(429, 23);
+            txtRuta.Size = new Size(429, 29);
             txtRuta.TabIndex = 22;
             // 
             // label6
             // 
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
-            label6.Location = new Point(132, 172);
+            label6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label6.Location = new Point(137, 146);
             label6.Name = "label6";
-            label6.Size = new Size(28, 15);
+            label6.Size = new Size(39, 21);
             label6.TabIndex = 6;
             label6.Text = "URL";
             label6.Click += label6_Click;
@@ -239,9 +253,10 @@
             // button5
             // 
             button5.Anchor = AnchorStyles.Top;
-            button5.Location = new Point(601, 135);
+            button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button5.Location = new Point(630, 103);
             button5.Name = "button5";
-            button5.Size = new Size(75, 23);
+            button5.Size = new Size(100, 29);
             button5.TabIndex = 23;
             button5.Text = "Examinar...";
             button5.UseVisualStyleBackColor = true;
