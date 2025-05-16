@@ -16,8 +16,11 @@ namespace RaduiUjedApp
     public partial class VerProg : Form
     {
         private readonly string apiUrl = "http://192.168.10.176/programaciones";
+        private readonly string apiUrlCat = "http://192.168.10.176/categorias";
         private List<detalles> programaciones; // Lista de programaciones
         private detalles detalleSeleccionado; // detalle seleccionado
+        private List<Categoria> categorias; // Lista 
+
         public VerProg()
         {
             InitializeComponent();
@@ -28,7 +31,7 @@ namespace RaduiUjedApp
             else
             {
                 button1.Visible = false;
-            }
+            } 
         }
         private static VerProg instance;
         public static VerProg GetInstance(Form contendorPadre)
@@ -48,6 +51,7 @@ namespace RaduiUjedApp
         private async void VerProg_Load(object sender, EventArgs e)
         {
             await CargarProgramaciones();
+            await CargarCategorias();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -170,7 +174,7 @@ namespace RaduiUjedApp
             // Ocultar columnas innecesarias
             dataGridView1.Columns["deT_ID"].Visible = false;
             dataGridView1.Columns["reG_ID"].Visible = false;
-            dataGridView1.Columns["tipO_ID"].Visible = false;
+            dataGridView1.Columns["tipo_ID"].Visible = false;
             dataGridView1.Columns["categoriaRuta"].Visible = false;
 
             //Habilita Saltos de Linea
@@ -187,6 +191,37 @@ namespace RaduiUjedApp
                     col.ReadOnly = false;
                 }
             }
+            if (!dataGridView1.Columns.Contains("CategoriaDescripcion"))
+            {
+                DataGridViewTextBoxColumn categoriaCol = new DataGridViewTextBoxColumn
+                {
+                    Name = "CategoriaDescripcion",
+                    HeaderText = "Categoría",
+                    ReadOnly = true
+                };
+
+                dataGridView1.Columns.Add(categoriaCol);
+            }
+
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells["tipO_ID"].Value != null)
+                {
+                    int id = Convert.ToInt32(row.Cells["tipO_ID"].Value);
+                    var categoria = this.categorias.FirstOrDefault(c => c.id == id);
+
+                    if (categoria != null)
+                    {
+                        row.Cells["CategoriaDescripcion"].Value = categoria.descripcion;
+                    }
+                }
+            }
+
+            if (dataGridView1.Columns.Contains("CategoriaDescripcion"))
+            {
+                dataGridView1.Columns["CategoriaDescripcion"].DisplayIndex = dataGridView1.Columns.Count - 3;
+            }
 
             // Reorganizar las columnas para que la columna "Acciones" esté al final
             dataGridView1.Columns["btnUbicacion"].DisplayIndex = dataGridView1.Columns.Count - 1;
@@ -201,7 +236,7 @@ namespace RaduiUjedApp
                 if (dataGridView1.Columns[e.ColumnIndex].Name == "btnUbicacion")
                 {
                     // Obtener la ruta de la celda correspondiente a la fila seleccionada
-                    string ruta = dataGridView1.Rows[e.RowIndex].Cells["categoriaRuta"].Value?.ToString();
+                    string ruta = dataGridView1.Rows[e.RowIndex].Cells["url"].Value?.ToString();
 
                     if (!string.IsNullOrEmpty(ruta)) // Verificar si la ruta no está vacía
                     {
@@ -267,5 +302,31 @@ namespace RaduiUjedApp
             form1.Show();
             this.Close();
         }
+
+        private async Task CargarCategorias()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrlCat);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+                        this.categorias = JsonConvert.DeserializeObject<List<Categoria>>(jsonResponse);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al obtener las categorías: " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
     }
 }
