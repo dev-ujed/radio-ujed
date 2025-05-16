@@ -46,17 +46,18 @@ namespace RaduiUjedApp
 
                     Form siguienteForm;
 
+
                     if (usuario.Rol == 1)
                     {
-                        siguienteForm = new formMenu(); // Abre el menú si el rol es 1
+                        siguienteForm = new formMenu();
+                        siguienteForm.FormClosed += (s, args) => Application.Exit();
                     }
                     else
                     {
-                        siguienteForm = new VerProg(); // Abre otro formulario si el rol no es 1
+                        siguienteForm = new VerProg();
+                        
                     }
 
-                    // Cierra toda la aplicación cuando se cierre el formulario principal
-                    siguienteForm.FormClosed += (s, args) => Application.Exit();
                     siguienteForm.Show();
                 }
                 else
@@ -87,9 +88,20 @@ namespace RaduiUjedApp
 
         private void label4_Click(object sender, EventArgs e)
         {
-            var VerProg = new VerProg();
-            VerProg.Show();
+            
+
+            var verProgForm = new VerProg();
+
             this.Hide();
+
+            // Verifica que está como invitado
+            if (SesionUsuario.Nombre == null)
+            {
+                // Solo si es invitado, cerramos la app cuando se cierre VerProg
+                verProgForm.FormClosed += (s, args) => Application.Exit();
+            }
+
+            verProgForm.Show();
         }
 
         private void label4_MouseEnter(object sender, EventArgs e)
