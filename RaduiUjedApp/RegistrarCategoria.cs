@@ -206,7 +206,42 @@ namespace RaduiUjedApp
                 return false;
             }
         }
+        private async Task<bool> EliminarCategoriaEnAPI(int id)
+        {
+            try
+            {
+                // URL de la API para actualizar el usuario
+                string apiUrl = $"http://192.168.10.176/borrarcat/{id}";
 
+                using (HttpClient client = new HttpClient())
+                {
+                    var categoria = new Categoria();
+                    string json = JsonConvert.SerializeObject(categoria);
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    // Enviar solicitud PUT a la API
+                    HttpResponseMessage response = await client.PatchAsync(apiUrl, content);
+                    //HttpResponseMessage response = await client.PutAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        return true; // Eliminación exitosa
+
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error al eliminar programación: {response.ReasonPhrase}");
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar  programación: {ex.Message}");
+                return false;
+            }
+        }
         private async void button1_Click(object sender, EventArgs e)
         {
             // Validar que los campos no estén vacíos
@@ -275,12 +310,12 @@ namespace RaduiUjedApp
         {
             await LimpiarForm();
         }
-        
+
         private void button3_Click_1(object sender, EventArgs e)
         {
             Categoria catSeleccionado = categorias.FirstOrDefault(c => c.id == 1);
 
-            
+
 
             using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
             {
@@ -296,6 +331,33 @@ namespace RaduiUjedApp
                 {
                     txtRuta.Text = folderDialog.SelectedPath; // Guarda la carpeta seleccionada
                 }
+            }
+        }
+
+        private async void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (categoriaSeleccionado == null || string.IsNullOrWhiteSpace(txtID.Text))
+            {
+                MessageBox.Show("Selecciona una Categoria para eliminar.");
+                return;
+            }
+
+           
+
+            //se intenta eliminar el programa seleccionado
+            bool resultado = await EliminarCategoriaEnAPI(categoriaSeleccionado.id);
+
+            //si se eliminó correctamente:
+            if (resultado)
+            {
+               
+                MessageBox.Show("Categoria eliminada correctamente.");
+                await CargarCategorias(); 
+                await LimpiarForm();
+            }
+            else
+            {
+                MessageBox.Show("Error al eliminar  Categoria. Por favor intente más tarde.");
             }
         }
     }

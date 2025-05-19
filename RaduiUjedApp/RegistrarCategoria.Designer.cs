@@ -40,6 +40,7 @@
             label4 = new Label();
             button5 = new Button();
             button3 = new Button();
+            btnEliminar = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCategoria).BeginInit();
             SuspendLayout();
             // 
@@ -105,7 +106,7 @@
             // 
             button1.Anchor = AnchorStyles.Top;
             button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(270, 270);
+            button1.Location = new Point(174, 270);
             button1.Margin = new Padding(4);
             button1.Name = "button1";
             button1.Size = new Size(159, 32);
@@ -118,7 +119,7 @@
             // 
             button2.Anchor = AnchorStyles.Top;
             button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(437, 270);
+            button2.Location = new Point(347, 270);
             button2.Margin = new Padding(4);
             button2.Name = "button2";
             button2.Size = new Size(198, 32);
@@ -164,7 +165,7 @@
             // 
             button5.Anchor = AnchorStyles.Top;
             button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button5.Location = new Point(643, 270);
+            button5.Location = new Point(727, 270);
             button5.Margin = new Padding(4);
             button5.Name = "button5";
             button5.Size = new Size(165, 32);
@@ -186,6 +187,19 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click_1;
             // 
+            // btnEliminar
+            // 
+            btnEliminar.Anchor = AnchorStyles.Top;
+            btnEliminar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnEliminar.Location = new Point(557, 270);
+            btnEliminar.Margin = new Padding(4);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(155, 32);
+            btnEliminar.TabIndex = 6;
+            btnEliminar.Text = "Eliminar categoría";
+            btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
+            // 
             // RegistrarCategoria
             // 
             AutoScaleDimensions = new SizeF(9F, 21F);
@@ -197,6 +211,7 @@
             Controls.Add(label4);
             Controls.Add(txtID);
             Controls.Add(label3);
+            Controls.Add(btnEliminar);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(dataGridViewCategoria);
@@ -227,5 +242,6 @@
         private Label label4;
         private Button button5;
         private Button button3;
+        private Button btnEliminar;
     }
 }
