@@ -40,15 +40,14 @@
             button4 = new Button();
             label5 = new Label();
             lblHora = new Label();
-            numericUpDown1 = new NumericUpDown();
             txtID = new TextBox();
             label4 = new Label();
             button6 = new Button();
             txtRuta = new TextBox();
             label6 = new Label();
             button5 = new Button();
+            txtBxTiempo = new TextBoxTime();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDet).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // dataGridViewDet
@@ -189,15 +188,6 @@
             lblHora.TabIndex = 17;
             lblHora.Text = "label6";
             // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Anchor = AnchorStyles.Top;
-            numericUpDown1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            numericUpDown1.Location = new Point(182, 173);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(429, 29);
-            numericUpDown1.TabIndex = 18;
-            // 
             // txtID
             // 
             txtID.Anchor = AnchorStyles.Top;
@@ -262,17 +252,26 @@
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click_1;
             // 
+            // txtBxTiempo
+            // 
+            txtBxTiempo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtBxTiempo.Location = new Point(182, 175);
+            txtBxTiempo.Name = "txtBxTiempo";
+            txtBxTiempo.Size = new Size(429, 29);
+            txtBxTiempo.TabIndex = 24;
+            txtBxTiempo.Text = "0m0s";
+            // 
             // RegDetProg
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 533);
+            Controls.Add(txtBxTiempo);
             Controls.Add(button5);
             Controls.Add(txtRuta);
             Controls.Add(button6);
             Controls.Add(label4);
             Controls.Add(txtID);
-            Controls.Add(numericUpDown1);
             Controls.Add(lblHora);
             Controls.Add(label5);
             Controls.Add(button4);
@@ -290,7 +289,6 @@
             Text = "Programas";
             Load += RegDetProg_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridViewDet).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -309,7 +307,6 @@
         private Button button4;
         private Label label5;
         private Label lblHora;
-        private NumericUpDown numericUpDown1;
         private DataGridView dataGridViewDet;
         private TextBox txtID;
         private Label label4;
@@ -317,5 +314,6 @@
         private TextBox txtRuta;
         private Label label6;
         private Button button5;
+        private TextBoxTime txtBxTiempo;
     }
 }

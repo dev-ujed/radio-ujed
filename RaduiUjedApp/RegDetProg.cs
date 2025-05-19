@@ -228,8 +228,9 @@ namespace RaduiUjedApp
 
             if (dataGridViewDet.Columns.Contains("tiempo"))
             {
-                dataGridViewDet.Columns["tiempo"].HeaderText = "Tiempo ' ";
+                dataGridViewDet.Columns["tiempo"].HeaderText = "Tiempo ' ";   
             }
+
 
             if (!dataGridViewDet.Columns.Contains("CategoriaDescripcion"))
             {
@@ -241,6 +242,18 @@ namespace RaduiUjedApp
                 };
 
                 dataGridViewDet.Columns.Add(categoriaCol);
+            }
+
+            if (!dataGridViewDet.Columns.Contains("TiempoDescripcion"))
+            {
+                DataGridViewTextBoxColumn tiempoCol = new DataGridViewTextBoxColumn
+                {
+                    Name = "TiempoDescripcion",
+                    HeaderText = "Tiempo '",
+                    ReadOnly = true
+                };
+
+                dataGridViewDet.Columns.Add(tiempoCol);
             }
 
 
@@ -258,8 +271,30 @@ namespace RaduiUjedApp
                 }
             }
 
+            foreach (DataGridViewRow row in dataGridViewDet.Rows)
+            {
+                if (row.Cells["tiempo"].Value != null && int.TryParse(row.Cells["tiempo"].Value.ToString(), out int tiempoSegundos))
+                {
+                    var tiempoTotal = "";
+                    int minutos = tiempoSegundos / 60;
+                    int segundos = tiempoSegundos % 60;
+
+                    if(minutos > 0)
+                    {
+                        tiempoTotal += $"{minutos}min";
+                    }
+                    if(segundos > 0)
+                    {
+                        tiempoTotal += $"{segundos}seg";
+                    }
+
+                    row.Cells["TiempoDescripcion"].Value = tiempoTotal;
+                }
+            }
+
+
             // 🔹 Ocultar columnas innecesarias si existen
-            string[] columnasOcultar = { "deT_ID", "reG_ID", "categoriaRuta", "url", "tipO_ID" };
+            string[] columnasOcultar = { "deT_ID", "reG_ID", "categoriaRuta", "url", "tipO_ID", "tiempo" };
             foreach (string columna in columnasOcultar)
             {
                 if (dataGridViewDet.Columns.Contains(columna))
@@ -283,6 +318,10 @@ namespace RaduiUjedApp
             if (dataGridViewDet.Columns.Contains("CategoriaDescripcion"))
             {
                 dataGridViewDet.Columns["CategoriaDescripcion"].DisplayIndex = dataGridViewDet.Columns.Count - 2;
+            }
+            if (dataGridViewDet.Columns.Contains("tiempoDescripcion"))
+            {
+                dataGridViewDet.Columns["tiempoDescripcion"].DisplayIndex = dataGridViewDet.Columns.Count - 6;
             }
             // 🔹 Mover la columna "Acciones" al final
             if (dataGridViewDet.Columns.Contains("btnUbicacion"))
@@ -391,9 +430,13 @@ namespace RaduiUjedApp
                 : this.hora;
 
                 //obtener duración a guardar
-                int duracionPrograma = (int)numericUpDown1.Value;
+                int minutos = int.Parse(txtBxTiempo.Text.Split('m')[0]);
+                int segundos = int.Parse(txtBxTiempo.Text.Split('m')[1].Split('s')[0]);
+
+                int tiempoTotal = minutos * 60 + segundos;
+                int duracionPrograma = Convert.ToInt32(tiempoTotal);
                 //calcular la hora de finalización
-                this.ultimaHora = fechaInicioPrograma.Add(TimeSpan.FromMinutes(duracionPrograma));
+                this.ultimaHora = fechaInicioPrograma.Add(TimeSpan.FromSeconds(duracionPrograma));
                 //se asigna la fecha de finalización al label de hora 
                 lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
 
@@ -497,7 +540,7 @@ namespace RaduiUjedApp
         {
             txtID.Text = string.Empty;
             txtDescrip.Text = string.Empty;
-            numericUpDown1.Value = 0;
+            txtBxTiempo.Text = "0m0s";
             txtRuta.Text = string.Empty;
             // Seleccionar la primera opción del ComboBox
             txtCategoria.SelectedIndex = 0;
@@ -541,7 +584,10 @@ namespace RaduiUjedApp
                         // Mostrar los datos en los controles de edición
                         txtID.Text = detalleSeleccionado.deT_ID.ToString();
                         txtDescrip.Text = detalleSeleccionado.u_DET_DES;
-                        numericUpDown1.Value = detalleSeleccionado.tiempo;
+                        var tiempoMostrar = int.Parse(detalleSeleccionado.tiempo.ToString());
+                        int minutos = tiempoMostrar / 60;
+                        int segundos = tiempoMostrar % 60;
+                        txtBxTiempo.Text = $"{minutos}m{segundos}s";
                         SeleccionarCategoriaEnComboBox(detalleSeleccionado.tipO_ID);
                         txtRuta.Text = detalleSeleccionado.url;
                     }
@@ -586,7 +632,11 @@ namespace RaduiUjedApp
             }
 
             var nuevaDescripción = txtDescrip.Text;
-            var nuevoTiempo = Convert.ToInt32(numericUpDown1.Value);
+            int minutos = int.Parse(txtBxTiempo.Text.Split('m')[0]);
+            int segundos = int.Parse(txtBxTiempo.Text.Split('m')[1].Split('s')[0]);
+
+            int tiempoTotal = minutos * 60 + segundos;
+            var nuevoTiempo = Convert.ToInt32(tiempoTotal);
             var nuevaRuta = txtRuta.Text;
 
             // Buscar el programa original

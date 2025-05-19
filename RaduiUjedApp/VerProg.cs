@@ -164,7 +164,7 @@ namespace RaduiUjedApp
             }
 
             // Configurar encabezados de columnas
-            dataGridView1.Columns["hora"].HeaderText = "Hora";
+            dataGridView1.Columns["hora"].HeaderText = "Hora de inicio";
             dataGridView1.Columns["u_DET_DES"].HeaderText = "Descripción de programación";
             dataGridView1.Columns["tiempo"].HeaderText = "Tiempo";
 
@@ -175,6 +175,7 @@ namespace RaduiUjedApp
             dataGridView1.Columns["deT_ID"].Visible = false;
             dataGridView1.Columns["reG_ID"].Visible = false;
             dataGridView1.Columns["tipo_ID"].Visible = false;
+            dataGridView1.Columns["tiempo"].Visible = false;
             dataGridView1.Columns["categoriaRuta"].Visible = false;
 
             //Habilita Saltos de Linea
@@ -218,11 +219,48 @@ namespace RaduiUjedApp
                 }
             }
 
+            if (!dataGridView1.Columns.Contains("TiempoDescripcion"))
+            {
+                DataGridViewTextBoxColumn tiempoCol = new DataGridViewTextBoxColumn
+                {
+                    Name = "TiempoDescripcion",
+                    HeaderText = "Tiempo '",
+                    ReadOnly = true
+                };
+
+                dataGridView1.Columns.Add(tiempoCol);
+            }
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                if (row.Cells["tiempo"].Value != null && int.TryParse(row.Cells["tiempo"].Value.ToString(), out int tiempoSegundos))
+                {
+                    var tiempoTotal = "";
+                    int minutos = tiempoSegundos / 60;
+                    int segundos = tiempoSegundos % 60;
+
+                    if (minutos > 0)
+                    {
+                        tiempoTotal += $"{minutos}min";
+                    }
+                    if (segundos > 0)
+                    {
+                        tiempoTotal += $"{segundos}seg";
+                    }
+
+                    row.Cells["TiempoDescripcion"].Value = tiempoTotal;
+                }
+            }
+
             if (dataGridView1.Columns.Contains("CategoriaDescripcion"))
             {
                 dataGridView1.Columns["CategoriaDescripcion"].DisplayIndex = dataGridView1.Columns.Count - 3;
             }
 
+            if (dataGridView1.Columns.Contains("tiempoDescripcion"))
+            {
+                dataGridView1.Columns["tiempoDescripcion"].DisplayIndex = dataGridView1.Columns.Count - 6;
+            }
             // Reorganizar las columnas para que la columna "Acciones" esté al final
             dataGridView1.Columns["btnUbicacion"].DisplayIndex = dataGridView1.Columns.Count - 1;
 
