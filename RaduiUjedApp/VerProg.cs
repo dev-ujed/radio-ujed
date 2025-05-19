@@ -336,9 +336,10 @@ namespace RaduiUjedApp
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            var form1 = new Form1();
-            form1.Show();
-            this.Close();
+            var loginForm = new Form1();
+            loginForm.FormClosed += (s, args) => this.Close(); 
+            loginForm.Show();
+            this.Hide(); 
         }
 
         private async Task CargarCategorias()
