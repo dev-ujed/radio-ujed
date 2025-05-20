@@ -349,7 +349,7 @@ namespace RaduiUjedApp
                     if (ultimoPrograma != null)
                     {
                         this.ultimaDuracion = ultimoPrograma.tiempo;
-                        TimeSpan horaUltimoPrograma = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimaDuracion));
+                        TimeSpan horaUltimoPrograma = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromSeconds(ultimaDuracion));
                         this.ultimaHora = horaUltimoPrograma;
                         lblHora.Text = "Hora: " + horaUltimoPrograma.ToString(@"hh\:mm\:ss");
                     }
@@ -680,7 +680,7 @@ namespace RaduiUjedApp
 
                 if (resultado)
                 {
-                    TimeSpan horaFinalPrograma = detalleSeleccionado.hora.TimeOfDay.Add(TimeSpan.FromMinutes(nuevoTiempo));
+                    TimeSpan horaFinalPrograma = detalleSeleccionado.hora.TimeOfDay.Add(TimeSpan.FromSeconds(nuevoTiempo));
 
                     for (int i = 0; i < programacionesDespues.Count; i++)
                     {
@@ -690,7 +690,7 @@ namespace RaduiUjedApp
                         }
                         else
                         {
-                            horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
+                            horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromSeconds(programacionesDespues[i - 1].tiempo));
                             await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
                         }
                     }
@@ -699,7 +699,7 @@ namespace RaduiUjedApp
                     await ActualizarFormulario();
 
                     var ultimoPrograma = programaciones.OrderByDescending(p => p.hora).FirstOrDefault();
-                    this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
+                    this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromSeconds(ultimoPrograma.tiempo));
                     this.ultimaDuracion = ultimoPrograma.tiempo;
                     lblHora.Text = "Hora: " + this.ultimaHora.ToString(@"hh\:mm\:ss");
 
@@ -797,14 +797,14 @@ namespace RaduiUjedApp
                 //si hay programa anterior se usa este como hora final
                 if (programaAnterior != null)
                 {
-                    horaFinalPrograma = programaAnterior.hora.TimeOfDay.Add(TimeSpan.FromMinutes(programaAnterior.tiempo));
+                    horaFinalPrograma = programaAnterior.hora.TimeOfDay.Add(TimeSpan.FromSeconds(programaAnterior.tiempo));
                 }
 
                 // Reajustar horas de los programas siguientes
                 for (int i = 0; i < programacionesDespues.Count; i++)
                 {
                     if (i > 0)
-                        horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromMinutes(programacionesDespues[i - 1].tiempo));
+                        horaFinalPrograma = horaFinalPrograma.Add(TimeSpan.FromSeconds(programacionesDespues[i - 1].tiempo));
 
                     await actualizarProgramasDespues(programacionesDespues[i], horaFinalPrograma);
                 }
@@ -815,7 +815,7 @@ namespace RaduiUjedApp
 
                 if (ultimoPrograma != null)
                 {
-                    this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromMinutes(ultimoPrograma.tiempo));
+                    this.ultimaHora = ultimoPrograma.hora.TimeOfDay.Add(TimeSpan.FromSeconds(ultimoPrograma.tiempo));
                     this.ultimaDuracion = ultimoPrograma.tiempo;
                     lblHora.Text = $"Hora: {this.ultimaHora:hh\\:mm\\:ss}";
                 }

@@ -254,6 +254,7 @@
             // 
             // txtBxTiempo
             // 
+            txtBxTiempo.Anchor = AnchorStyles.Top;
             txtBxTiempo.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             txtBxTiempo.Location = new Point(182, 175);
             txtBxTiempo.Name = "txtBxTiempo";
