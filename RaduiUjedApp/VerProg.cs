@@ -31,7 +31,7 @@ namespace RaduiUjedApp
             else
             {
                 button1.Visible = false;
-            } 
+            }
         }
         private static VerProg instance;
         public static VerProg GetInstance(Form contendorPadre)
@@ -177,6 +177,7 @@ namespace RaduiUjedApp
             dataGridView1.Columns["tipo_ID"].Visible = false;
             dataGridView1.Columns["tiempo"].Visible = false;
             dataGridView1.Columns["categoriaRuta"].Visible = false;
+            dataGridView1.Columns["url"].Visible = false;
 
             //Habilita Saltos de Linea
             dataGridView1.Columns["u_DET_DES"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -252,17 +253,28 @@ namespace RaduiUjedApp
                 }
             }
 
-            if (dataGridView1.Columns.Contains("CategoriaDescripcion"))
+
+
+            if (dataGridView1.Columns.Contains("hora"))
             {
-                dataGridView1.Columns["CategoriaDescripcion"].DisplayIndex = dataGridView1.Columns.Count - 3;
+                dataGridView1.Columns["hora"].DisplayIndex = 0;
             }
 
             if (dataGridView1.Columns.Contains("tiempoDescripcion"))
             {
-                dataGridView1.Columns["tiempoDescripcion"].DisplayIndex = dataGridView1.Columns.Count - 6;
+                dataGridView1.Columns["tiempoDescripcion"].DisplayIndex = 1;
             }
-            // Reorganizar las columnas para que la columna "Acciones" esté al final
+            if (dataGridView1.Columns.Contains("CategoriaDescripcion"))
+            {
+                dataGridView1.Columns["u_DET_DES"].DisplayIndex = 2;
+            }
+            if (dataGridView1.Columns.Contains("u_DET_DES"))
+            {
+                dataGridView1.Columns["CategoriaDescripcion"].DisplayIndex = 3;
+            }
             dataGridView1.Columns["btnUbicacion"].DisplayIndex = dataGridView1.Columns.Count - 1;
+
+
 
         }
 
@@ -301,7 +313,7 @@ namespace RaduiUjedApp
             // Alternar colores: filas impares de un color, filas pares de otro color
             if (e.RowIndex % 2 == 0)
             {
-                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightGray; // Color para filas pares
+                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(184, 224, 249); // Color para filas pares
             }
             else
             {
@@ -337,9 +349,9 @@ namespace RaduiUjedApp
         private void button1_Click_1(object sender, EventArgs e)
         {
             var loginForm = new Form1();
-            loginForm.FormClosed += (s, args) => this.Close(); 
+            loginForm.FormClosed += (s, args) => this.Close();
             loginForm.Show();
-            this.Hide(); 
+            this.Hide();
         }
 
         private async Task CargarCategorias()
@@ -367,5 +379,14 @@ namespace RaduiUjedApp
             }
         }
 
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -132,7 +132,21 @@ namespace RaduiUjedApp
                 categoriaSeleccionado.ruta = txtRuta.Text;
                 categoriaSeleccionado.usuariO_MOD = SesionUsuario.Usuario;
 
+                if (string.IsNullOrWhiteSpace(txtDesc.Text) ||
+                string.IsNullOrWhiteSpace(txtRuta.Text))
+                {
+                    MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; 
+                }
+                if (txtRuta.Text.Contains(":\\"))
+                {
 
+
+                    MessageBox.Show("Estás ingresando una ruta local. Por favor, usa rutas que comiencen con: 172.20.93.248 ", "Ruta inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+
+                    return;
+                }
                 // Enviar los datos actualizados a la API
                 bool resultado = await ActualizarCategoriaEnAPI(categoriaSeleccionado);
 
@@ -250,6 +264,18 @@ namespace RaduiUjedApp
             {
                 MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return; // Detiene la ejecución del método
+            }
+            
+
+            // Si contiene ":\", es una ruta local
+            if (txtRuta.Text.Contains(":\\"))
+            {
+                
+                
+                MessageBox.Show("Estás ingresando una ruta local. Por favor, usa rutas que comiencen con: 172.20.93.248 ", "Ruta inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+
+                return;
             }
             Categoria nuevoCategoria = new Categoria
             {
