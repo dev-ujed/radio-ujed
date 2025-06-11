@@ -100,7 +100,7 @@
             lb2.Name = "lb2";
             lb2.Size = new Size(200, 44);
             lb2.TabIndex = 8;
-            lb2.Text = "Categorías";
+            lb2.Text = "Carpetas";
             lb2.TextAlign = ContentAlignment.MiddleCenter;
             lb2.Click += button5_Click;
             // 

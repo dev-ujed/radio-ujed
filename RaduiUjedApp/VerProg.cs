@@ -166,6 +166,7 @@ namespace RaduiUjedApp
             // Configurar encabezados de columnas
             dataGridView1.Columns["hora"].HeaderText = "Hora de inicio";
             dataGridView1.Columns["u_DET_DES"].HeaderText = "Descripción de programación";
+            dataGridView1.Columns["newCategoria"].HeaderText = "Categoría";
             dataGridView1.Columns["tiempo"].HeaderText = "Tiempo";
 
             // Formatear la columna "hora" para que muestre solo la hora
@@ -178,6 +179,8 @@ namespace RaduiUjedApp
             dataGridView1.Columns["tiempo"].Visible = false;
             dataGridView1.Columns["categoriaRuta"].Visible = false;
             dataGridView1.Columns["url"].Visible = false;
+            dataGridView1.Columns["cat_id"].Visible = false;
+
 
             //Habilita Saltos de Linea
             dataGridView1.Columns["u_DET_DES"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -193,32 +196,32 @@ namespace RaduiUjedApp
                     col.ReadOnly = false;
                 }
             }
-            if (!dataGridView1.Columns.Contains("CategoriaDescripcion"))
-            {
-                DataGridViewTextBoxColumn categoriaCol = new DataGridViewTextBoxColumn
-                {
-                    Name = "CategoriaDescripcion",
-                    HeaderText = "Categoría",
-                    ReadOnly = true
-                };
+            //if (!dataGridView1.Columns.Contains("CategoriaDescripcion"))
+            //{
+            //    DataGridViewTextBoxColumn categoriaCol = new DataGridViewTextBoxColumn
+            //    {
+            //        Name = "CategoriaDescripcion",
+            //        HeaderText = "Categoría",
+            //        ReadOnly = true
+            //    };
 
-                dataGridView1.Columns.Add(categoriaCol);
-            }
+            //    dataGridView1.Columns.Add(categoriaCol);
+            //}
 
 
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                if (row.Cells["tipO_ID"].Value != null)
-                {
-                    int id = Convert.ToInt32(row.Cells["tipO_ID"].Value);
-                    var categoria = this.categorias.FirstOrDefault(c => c.id == id);
+            //foreach (DataGridViewRow row in dataGridView1.Rows)
+            //{
+            //    if (row.Cells["tipO_ID"].Value != null)
+            //    {
+            //        int id = Convert.ToInt32(row.Cells["tipO_ID"].Value);
+            //        var categoria = this.categorias.FirstOrDefault(c => c.id == id);
 
-                    if (categoria != null)
-                    {
-                        row.Cells["CategoriaDescripcion"].Value = categoria.descripcion;
-                    }
-                }
-            }
+            //        if (categoria != null)
+            //        {
+            //            row.Cells["CategoriaDescripcion"].Value = categoria.descripcion;
+            //        }
+            //    }
+            //}
 
             if (!dataGridView1.Columns.Contains("TiempoDescripcion"))
             {
@@ -264,13 +267,13 @@ namespace RaduiUjedApp
             {
                 dataGridView1.Columns["tiempoDescripcion"].DisplayIndex = 1;
             }
-            if (dataGridView1.Columns.Contains("CategoriaDescripcion"))
+            if (dataGridView1.Columns.Contains("u_DET_DES"))
             {
                 dataGridView1.Columns["u_DET_DES"].DisplayIndex = 2;
             }
-            if (dataGridView1.Columns.Contains("u_DET_DES"))
+            if (dataGridView1.Columns.Contains("newCategoria"))
             {
-                dataGridView1.Columns["CategoriaDescripcion"].DisplayIndex = 3;
+                dataGridView1.Columns["newCategoria"].DisplayIndex = 3;
             }
             dataGridView1.Columns["btnUbicacion"].DisplayIndex = dataGridView1.Columns.Count - 1;
 
