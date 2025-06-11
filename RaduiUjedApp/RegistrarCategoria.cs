@@ -152,18 +152,18 @@ namespace RaduiUjedApp
 
                 if (resultado)
                 {
-                    MessageBox.Show("Categoria actualizada correctamente.");
+                    MessageBox.Show("Carpeta actualizada correctamente.");
                     await CargarCategorias(); // Recargar los datos en el DataGridView
                     await LimpiarForm();
                 }
                 else
                 {
-                    MessageBox.Show("Error al actualizar el usuario.");
+                    MessageBox.Show("Error al actualizar el carpeta.");
                 }
             }
             else
             {
-                MessageBox.Show("Selecciona una categoria para actualizar.");
+                MessageBox.Show("Selecciona una carpeta para actualizar.");
             }
         }
 
@@ -209,14 +209,14 @@ namespace RaduiUjedApp
                     }
                     else
                     {
-                        MessageBox.Show($"Error al actualizar usuario: {response.ReasonPhrase}");
+                        MessageBox.Show($"Error al actualizar carpeta: {response.ReasonPhrase}");
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al actualizar el usuario: {ex.Message}");
+                MessageBox.Show($"Error al actualizar el carpeta: {ex.Message}");
                 return false;
             }
         }
@@ -245,14 +245,14 @@ namespace RaduiUjedApp
                     }
                     else
                     {
-                        MessageBox.Show($"Error al eliminar programación: {response.ReasonPhrase}");
+                        MessageBox.Show($"Error al eliminar carpeta: {response.ReasonPhrase}");
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al eliminar  programación: {ex.Message}");
+                MessageBox.Show($"Error al eliminar  carpeta: {ex.Message}");
                 return false;
             }
         }
@@ -315,19 +315,19 @@ namespace RaduiUjedApp
 
                     if (response.IsSuccessStatusCode)
                     {
-                        MessageBox.Show("Categoria insertada correctamente.");
+                        MessageBox.Show("Carpeta insertada correctamente.");
                         return true;
                     }
                     else
                     {
-                        MessageBox.Show($"Error al insertar categoria: {response.ReasonPhrase}");
+                        MessageBox.Show($"Error al insertar carpeta: {response.ReasonPhrase}");
                         return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al insertar el categoria: {ex.Message}");
+                MessageBox.Show($"Error al insertar el carpeta: {ex.Message}");
                 return false;
             }
         }

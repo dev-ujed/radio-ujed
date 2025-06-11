@@ -22,8 +22,10 @@ namespace RaduiUjedApp
         private int idRegistro;
         private TimeSpan hora; // Se usa TimeSpan para manejar hora
         private readonly string apiUrl = "http://192.168.10.176/categorias";
+        private readonly string apiUrlNew = "http://192.168.10.176/cat";
         private List<detalles> programaciones; // Lista de programaciones
         private List<Categoria> categorias; // Lista 
+        private List<NewCategoria> newcategorias; // Lista 
 
         private TimeSpan ultimaHora;
         private int ultimaDuracion = 0;
@@ -77,6 +79,7 @@ namespace RaduiUjedApp
             //lblID.Text = "ID: " + idRegistro.ToString();
             lblHora.Text = "Hora: " + this.hora.ToString(@"hh\:mm\:ss");
             // Cargar datos de las categorias
+            CargarNewCategorias();
             CargarCategorias();
         }
         private static RegDetProg instance;
@@ -113,7 +116,47 @@ namespace RaduiUjedApp
             }
         }
 
+        private async Task CargarNewCategorias()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(apiUrlNew);
 
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string jsonResponse = await response.Content.ReadAsStringAsync();
+                        this.newcategorias = JsonConvert.DeserializeObject<List<NewCategoria>>(jsonResponse);
+
+                        // Llenar el ComboBox con las categorías
+                        comboBoxCat.DataSource = newcategorias;
+                        comboBoxCat.DisplayMember = "descripcion";
+                        comboBoxCat.ValueMember = "id_categoria";
+                        AutoCompleteStringCollection collection = new AutoCompleteStringCollection();
+
+                        foreach (var categoria in this.newcategorias)
+                        {
+                            collection.Add(categoria.descripcion); // si descripcion es una propiedad pública
+                        }
+
+                        comboBoxCat.AutoCompleteCustomSource = collection;
+                        comboBoxCat.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                        comboBoxCat.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al obtener las categorías: " + response.ReasonPhrase);
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
         private async Task CargarCategorias()
         {
             try
@@ -166,6 +209,7 @@ namespace RaduiUjedApp
         private async void RegDetProg_Load(object sender, EventArgs e)
         {
             await CargarCategorias();
+            await CargarNewCategorias();    
             // URL de la API
             string apiUrl = $"http://192.168.10.176/detalleprog/{idRegistro}";
             // Obtener los datos de la API
@@ -228,7 +272,7 @@ namespace RaduiUjedApp
 
             if (dataGridViewDet.Columns.Contains("tiempo"))
             {
-                dataGridViewDet.Columns["tiempo"].HeaderText = "Tiempo ' ";   
+                dataGridViewDet.Columns["tiempo"].HeaderText = "Tiempo ' ";
             }
 
 
@@ -257,20 +301,30 @@ namespace RaduiUjedApp
             }
 
 
+            //foreach (DataGridViewRow row in dataGridViewDet.Rows)
+            //{
+            //    if (row.Cells["tipO_ID"].Value != null)
+            //    {
+            //        int id = Convert.ToInt32(row.Cells["tipO_ID"].Value);
+            //        var categoria = this.categorias.FirstOrDefault(c => c.id == id);
+                    
+
+            //        if (categoria != null)
+            //        {
+            //            row.Cells["CategoriaDescripcion"].Value = categoria.descripcion;
+            //        }
+            //    }
+            //}
+
+
             foreach (DataGridViewRow row in dataGridViewDet.Rows)
             {
-                if (row.Cells["tipO_ID"].Value != null)
+                if (row.Cells["newCategoria"].Value != null)
                 {
-                    int id = Convert.ToInt32(row.Cells["tipO_ID"].Value);
-                    var categoria = this.categorias.FirstOrDefault(c => c.id == id);
-
-                    if (categoria != null)
-                    {
-                        row.Cells["CategoriaDescripcion"].Value = categoria.descripcion;
-                    }
+                    row.Cells["CategoriaDescripcion"].Value = row.Cells["newCategoria"].Value;
                 }
             }
-
+            
             foreach (DataGridViewRow row in dataGridViewDet.Rows)
             {
                 if (row.Cells["tiempo"].Value != null && int.TryParse(row.Cells["tiempo"].Value.ToString(), out int tiempoSegundos))
@@ -279,11 +333,11 @@ namespace RaduiUjedApp
                     int minutos = tiempoSegundos / 60;
                     int segundos = tiempoSegundos % 60;
 
-                    if(minutos > 0)
+                    if (minutos > 0)
                     {
                         tiempoTotal += $"{minutos}min";
                     }
-                    if(segundos > 0)
+                    if (segundos > 0)
                     {
                         tiempoTotal += $"{segundos}seg";
                     }
@@ -294,7 +348,7 @@ namespace RaduiUjedApp
 
 
             // 🔹 Ocultar columnas innecesarias si existen
-            string[] columnasOcultar = { "deT_ID", "reG_ID", "categoriaRuta", "url", "tipO_ID", "tiempo" };
+            string[] columnasOcultar = { "deT_ID", "reG_ID", "categoriaRuta", "url", "tipO_ID", "tiempo", "cat_id", "newCategoria" };
             foreach (string columna in columnasOcultar)
             {
                 if (dataGridViewDet.Columns.Contains(columna))
@@ -314,14 +368,22 @@ namespace RaduiUjedApp
                     col.ReadOnly = false;
                 }
             }
+            if (dataGridViewDet.Columns.Contains("u_DET_DES"))
+            {
+                dataGridViewDet.Columns["u_DET_DES"].DisplayIndex = 2;
+            }
 
             if (dataGridViewDet.Columns.Contains("CategoriaDescripcion"))
             {
-                dataGridViewDet.Columns["CategoriaDescripcion"].DisplayIndex = dataGridViewDet.Columns.Count - 2;
+                dataGridViewDet.Columns["CategoriaDescripcion"].DisplayIndex = 3;
             }
             if (dataGridViewDet.Columns.Contains("tiempoDescripcion"))
             {
-                dataGridViewDet.Columns["tiempoDescripcion"].DisplayIndex = dataGridViewDet.Columns.Count - 6;
+                dataGridViewDet.Columns["tiempoDescripcion"].DisplayIndex = 1;
+            }
+            if (dataGridViewDet.Columns.Contains("hora"))
+            {
+                dataGridViewDet.Columns["hora"].DisplayIndex = 0;
             }
             // 🔹 Mover la columna "Acciones" al final
             if (dataGridViewDet.Columns.Contains("btnUbicacion"))
@@ -462,6 +524,11 @@ namespace RaduiUjedApp
                         MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return; // Detiene la ejecución del método
                     }
+                    if (string.IsNullOrWhiteSpace(comboBoxCat.Text))
+                    {
+                        MessageBox.Show("Todos los campos deben estar llenos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return; // Detiene la ejecución del método
+                    }
                     DetProgra nuevoProg = new DetProgra
                     {
                         // NO SE ENVÍA iD_USUARIO (se genera en la BD)
@@ -472,7 +539,9 @@ namespace RaduiUjedApp
                         hora = nuevaFechaHora,
                         usuariO_REG = SesionUsuario.Usuario,
                         fechA_REG = DateTime.Now,
-                        url = txtRuta.Text
+                        url = txtRuta.Text,
+                        caT_ID = Convert.ToInt32(comboBoxCat.SelectedValue),
+
 
                     };
                     if (await InsertarDetProgramacionEnAPI(nuevoProg))
@@ -482,6 +551,7 @@ namespace RaduiUjedApp
 
                         await LimpiarForm(); // Limpiar formulario después de insertar
                         await CargarCategorias(); // Recargar los datos en el DataGridView
+                        await CargarNewCategorias();
                         await RefrescarDesdeAPI(apiUrl);
                         ConfigurarDataGridView();
                     }
@@ -580,7 +650,6 @@ namespace RaduiUjedApp
                     {
                         // Obtener el detalle seleccionado
                         detalleSeleccionado = programaciones[e.RowIndex];
-
                         // Mostrar los datos en los controles de edición
                         txtID.Text = detalleSeleccionado.deT_ID.ToString();
                         txtDescrip.Text = detalleSeleccionado.u_DET_DES;
@@ -589,6 +658,7 @@ namespace RaduiUjedApp
                         int segundos = tiempoMostrar % 60;
                         txtBxTiempo.Text = $"{minutos}m{segundos}s";
                         SeleccionarCategoriaEnComboBox(detalleSeleccionado.tipO_ID);
+                        SeleccionarNewCategoriaEnComboBox(detalleSeleccionado.newCategoria);
                         txtRuta.Text = detalleSeleccionado.url;
                     }
                 }
@@ -606,8 +676,20 @@ namespace RaduiUjedApp
                     break;
                 }
             }
-        }
 
+        }
+        private void SeleccionarNewCategoriaEnComboBox(string cateID)
+        {
+            foreach (NewCategoria cat in comboBoxCat.Items)
+            {    
+                if (cat.descripcion == cateID)
+                {
+                    comboBoxCat.SelectedItem = cat;
+                    break;
+                }
+            }
+
+        }
         private async void button2_Click(object sender, EventArgs e)
         {
             // Validar que los campos no estén vacíos
@@ -630,6 +712,12 @@ namespace RaduiUjedApp
                 Categoria catSeleccionado = (Categoria)txtCategoria.SelectedItem;
                 detalleSeleccionado.tipO_ID = catSeleccionado.id;
             }
+            if (comboBoxCat.SelectedItem != null)
+            {
+                NewCategoria catSelec = (NewCategoria)comboBoxCat.SelectedItem;
+                detalleSeleccionado.cat_id = catSelec.id_categoria;
+            }
+
 
             var nuevaDescripción = txtDescrip.Text;
             int minutos = int.Parse(txtBxTiempo.Text.Split('m')[0]);
@@ -672,7 +760,9 @@ namespace RaduiUjedApp
                     hora = detalleSeleccionado.hora,
                     usuariO_MOD = SesionUsuario.Usuario,
                     fechA_MOD = DateTime.Now,
-                    url = nuevaRuta
+                    url = nuevaRuta,
+                    caT_ID = Convert.ToInt32(comboBoxCat.SelectedValue),
+
                 };
 
                 // Enviar los datos actualizados a la API
@@ -718,6 +808,7 @@ namespace RaduiUjedApp
             string apiUrl = $"http://192.168.10.176/detalleprog/{detalleSeleccionado.reG_ID}";
             await LimpiarForm(); // Limpiar formulario después de insertar
             await CargarCategorias(); // Recargar los datos en el DataGridView
+            await CargarNewCategorias();
             await RefrescarDesdeAPI(apiUrl);
             ConfigurarDataGridView();
 
@@ -901,6 +992,8 @@ namespace RaduiUjedApp
             {
                 // Sumamos la nueva hora (this.horaInicio) a la fecha original
                 DateTime nuevaFechaHora = fechaHoraOriginal.Date.Add(horaInicioPrograma);
+                
+                var idcat = newcategorias.FirstOrDefault(c => c.descripcion == Programa.newCategoria);
 
                 DetProgra detProg = new DetProgra
                 {
@@ -913,7 +1006,9 @@ namespace RaduiUjedApp
                     hora = nuevaFechaHora,
                     usuariO_MOD = SesionUsuario.Usuario,
                     fechA_MOD = DateTime.Now,
-                    url = Programa.url
+                    url = Programa.url,
+                    caT_ID = int.Parse(idcat.id_categoria.ToString())
+
 
                 };
 
@@ -924,6 +1019,7 @@ namespace RaduiUjedApp
                 {
                     string apiUrl = $"http://192.168.10.176/detalleprog/{Programa.reG_ID}";
                     await CargarCategorias();
+                    await CargarNewCategorias();
                     await RefrescarDesdeAPI(apiUrl);
                     ConfigurarDataGridView();
                 }
@@ -961,9 +1057,12 @@ namespace RaduiUjedApp
             }
         }
 
-        private void dataGridViewDet_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void txtCategoria_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+            Categoria categoriaSeleccionada = (Categoria)txtCategoria.SelectedItem;
+            string rutaSeleccionada = categoriaSeleccionada.ruta;
+            txtRuta.Text = rutaSeleccionada; // Establece la ruta de la categoría seleccionada
         }
     }
 
@@ -983,7 +1082,7 @@ namespace RaduiUjedApp
         public DateTime? fechA_MOD { get; set; }     // Coincide con "fechA_REG"
 
         public string url { get; set; }       // Coincide con "url"
-
+        public int caT_ID { get; set; }
     }
 
     public class detalles
@@ -997,7 +1096,14 @@ namespace RaduiUjedApp
         public string categoriaRuta { get; set; }
 
         public string url { get; set; }
+        public int cat_id { get; set; }
+        public string newCategoria { get; set; }
+
 
     }
-
+    public class NewCategoria
+    {
+        public int id_categoria { get; set; }       // Coincide con "id"
+        public string descripcion { get; set; }       // Coincide con "descripcion"
+    }
 }

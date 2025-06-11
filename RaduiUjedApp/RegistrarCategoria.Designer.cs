@@ -111,7 +111,7 @@
             button1.Name = "button1";
             button1.Size = new Size(159, 32);
             button1.TabIndex = 5;
-            button1.Text = "Registrar categoría";
+            button1.Text = "Registrar carpetas";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -124,7 +124,7 @@
             button2.Name = "button2";
             button2.Size = new Size(198, 32);
             button2.TabIndex = 6;
-            button2.Text = "Actualizar categoría";
+            button2.Text = "Actualizar carpetas";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -133,12 +133,12 @@
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(449, 29);
+            label3.Location = new Point(485, 29);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(106, 25);
+            label3.Size = new Size(89, 25);
             label3.TabIndex = 9;
-            label3.Text = "Categorías";
+            label3.Text = "Carpetas";
             // 
             // txtID
             // 
@@ -196,7 +196,7 @@
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(155, 32);
             btnEliminar.TabIndex = 6;
-            btnEliminar.Text = "Eliminar categoría";
+            btnEliminar.Text = "Eliminar carpeta";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
             // 

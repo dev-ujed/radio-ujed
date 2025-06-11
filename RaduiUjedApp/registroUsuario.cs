@@ -16,6 +16,8 @@ namespace RaduiUjedApp
         public registroUsuario()
         {
             InitializeComponent();
+            txtID.Visible = false; // Ocultar el campo ID, ya que se genera automáticamente en la base de datos
+            label2.Visible = false; // Ocultar la etiqueta del ID, ya que no es necesario mostrarlo al usuario
         }
         
         private static registroUsuario instance;

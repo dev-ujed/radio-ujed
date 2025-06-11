@@ -56,7 +56,7 @@
             dataGridViewUsuarios.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewUsuarios.Location = new Point(98, 422);
+            dataGridViewUsuarios.Location = new Point(102, 373);
             dataGridViewUsuarios.Margin = new Padding(4);
             dataGridViewUsuarios.Name = "dataGridViewUsuarios";
             dataGridViewUsuarios.RowTemplate.Height = 25;
@@ -68,7 +68,7 @@
             // 
             button1.Anchor = AnchorStyles.Top;
             button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(259, 362);
+            button1.Location = new Point(262, 323);
             button1.Margin = new Padding(4);
             button1.Name = "button1";
             button1.Size = new Size(195, 32);
@@ -94,18 +94,18 @@
             txtID.Anchor = AnchorStyles.Top;
             txtID.Enabled = false;
             txtID.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtID.Location = new Point(333, 67);
+            txtID.Location = new Point(64, 50);
             txtID.Margin = new Padding(4);
             txtID.Name = "txtID";
             txtID.ReadOnly = true;
-            txtID.Size = new Size(476, 29);
+            txtID.Size = new Size(133, 29);
             txtID.TabIndex = 3;
             // 
             // txtNombre
             // 
             txtNombre.Anchor = AnchorStyles.Top;
             txtNombre.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtNombre.Location = new Point(333, 107);
+            txtNombre.Location = new Point(336, 68);
             txtNombre.Margin = new Padding(4);
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(476, 29);
@@ -115,7 +115,7 @@
             // 
             txtPaterno.Anchor = AnchorStyles.Top;
             txtPaterno.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtPaterno.Location = new Point(333, 148);
+            txtPaterno.Location = new Point(336, 109);
             txtPaterno.Margin = new Padding(4);
             txtPaterno.Name = "txtPaterno";
             txtPaterno.Size = new Size(476, 29);
@@ -125,7 +125,7 @@
             // 
             txtMaterno.Anchor = AnchorStyles.Top;
             txtMaterno.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtMaterno.Location = new Point(333, 188);
+            txtMaterno.Location = new Point(336, 149);
             txtMaterno.Margin = new Padding(4);
             txtMaterno.Name = "txtMaterno";
             txtMaterno.Size = new Size(476, 29);
@@ -136,7 +136,7 @@
             ComboRol.Anchor = AnchorStyles.Top;
             ComboRol.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             ComboRol.FormattingEnabled = true;
-            ComboRol.Location = new Point(333, 229);
+            ComboRol.Location = new Point(336, 190);
             ComboRol.Margin = new Padding(4);
             ComboRol.Name = "ComboRol";
             ComboRol.Size = new Size(476, 29);
@@ -146,7 +146,7 @@
             // 
             txtUsuario.Anchor = AnchorStyles.Top;
             txtUsuario.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtUsuario.Location = new Point(336, 268);
+            txtUsuario.Location = new Point(339, 229);
             txtUsuario.Margin = new Padding(4);
             txtUsuario.Name = "txtUsuario";
             txtUsuario.Size = new Size(473, 29);
@@ -156,7 +156,7 @@
             // 
             txtPassword.Anchor = AnchorStyles.Top;
             txtPassword.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            txtPassword.Location = new Point(334, 307);
+            txtPassword.Location = new Point(337, 268);
             txtPassword.Margin = new Padding(4);
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(475, 29);
@@ -166,7 +166,7 @@
             // 
             button2.Anchor = AnchorStyles.Top;
             button2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(473, 362);
+            button2.Location = new Point(476, 323);
             button2.Margin = new Padding(4);
             button2.Name = "button2";
             button2.Size = new Size(204, 32);
@@ -180,7 +180,7 @@
             label2.Anchor = AnchorStyles.Top;
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(291, 71);
+            label2.Location = new Point(22, 54);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(28, 21);
@@ -193,7 +193,7 @@
             label3.Anchor = AnchorStyles.Top;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(251, 118);
+            label3.Location = new Point(254, 79);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(71, 21);
@@ -205,7 +205,7 @@
             label4.Anchor = AnchorStyles.Top;
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label4.Location = new Point(255, 159);
+            label4.Location = new Point(258, 120);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(66, 21);
@@ -217,7 +217,7 @@
             label5.Anchor = AnchorStyles.Top;
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label5.Location = new Point(255, 200);
+            label5.Location = new Point(258, 161);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(72, 21);
@@ -229,7 +229,7 @@
             label6.Anchor = AnchorStyles.Top;
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(291, 240);
+            label6.Location = new Point(294, 201);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(36, 21);
@@ -241,7 +241,7 @@
             label7.Anchor = AnchorStyles.Top;
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(261, 279);
+            label7.Location = new Point(264, 240);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
             label7.Size = new Size(67, 21);
@@ -253,7 +253,7 @@
             label8.Anchor = AnchorStyles.Top;
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(237, 319);
+            label8.Location = new Point(240, 280);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(92, 21);
@@ -264,7 +264,7 @@
             // 
             button5.Anchor = AnchorStyles.Top;
             button5.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            button5.Location = new Point(698, 362);
+            button5.Location = new Point(701, 323);
             button5.Margin = new Padding(4);
             button5.Name = "button5";
             button5.Size = new Size(162, 32);
